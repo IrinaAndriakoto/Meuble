@@ -14,18 +14,34 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
 import java.sql.*;
+import java.util.List;
+import model.Style;
 
-@WebServlet("/insertStyle")
-public class InsertStyleServlet extends HttpServlet {
+@WebServlet("/insertMateriel")
+public class InsertMaterielServlet extends HttpServlet {
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-            request.getRequestDispatcher("WEB-INF/insertStyle.jsp").forward(request, response);
+        PrintWriter out = response.getWriter();
+        try{
+                 Service dataService = new Service();
+        request.setAttribute("connection",dataService.getConnection());
+                 List<Style> list = dataService.getAllStyle();
+                 request.setAttribute("liste_style", list);
+        
+        // Redirigez vers la page JSP d'affichage
+        request.getRequestDispatcher("WEB-INF/insertMateriaux.jsp").forward(request, response);
+        }catch(Exception e){
+            throw new ServletException(e);
+//            e.printStackTrace();
         }
+    }
+              
+
     
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String styleValue = request.getParameter("style");
+        String MatrValue = request.getParameter("materiel");
 
         Connection connection = null;
         
@@ -35,13 +51,16 @@ public class InsertStyleServlet extends HttpServlet {
             Service dataService = new Service();
                  connection = dataService.getConnection();
             request.setAttribute("connection",connection);
-            dataService.insertStyle(connection, styleValue);
+            
+            String idStyle = request.getParameter("style");
+            
+            dataService.insertMateriel(connection, MatrValue,idStyle);
 
             // Fermer la connexion
             connection.close();
 
             // Rediriger vers une page de confirmation ou une autre page appropriée
-            response.sendRedirect(request.getContextPath() + "confirmation.jsp");
+            response.sendRedirect("confirmation.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             // Rediriger vers une page d'erreur avec le message d'erreur approprié

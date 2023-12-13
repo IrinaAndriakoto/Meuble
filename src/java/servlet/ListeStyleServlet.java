@@ -20,38 +20,28 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.*;
-import java.sql.*;
 
-@WebServlet("/listeMateriel")
-public class MateriauxServlet extends HttpServlet {
+@WebServlet("/listeStyle")
+public class ListeStyleServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        Connection connection = null;
         try{
-                Service dataService = new Service();
-                 connection = dataService.getConnection();
-        request.setAttribute("connection",connection);
-                 List<Materiel> list = dataService.getAllMateriel();
-//                 System.out.println("Nombre de stocks récupérés : " + stock.size());
-                 request.setAttribute("liste_materiel", list);
+                 Service dataService = new Service();
+        request.setAttribute("connection",dataService.getConnection());
+                 List<Style> list = dataService.getAllStyle();
+                 request.setAttribute("liste_style", list);
         
         // Redirigez vers la page JSP d'affichage
-        request.getRequestDispatcher("/WEB-INF/listeMateriaux.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/listeStyle.jsp").forward(request, response);
         }catch(Exception e){
             throw new ServletException(e);
 //            e.printStackTrace();
         }
-         finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
     }
+    
+
+
 }

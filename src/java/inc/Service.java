@@ -8,6 +8,7 @@ package inc;
  *
  * @author Irina
  */
+import static java.lang.Integer.parseInt;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +57,14 @@ public class Service {
         }
         }
 
-        public void insertMateriel(Connection c, String m) throws Exception {
+        public void insertMateriel(Connection c, String m, String idStyle) throws Exception {
             PreparedStatement pst = null;
-            String sql = "INSERT INTO Materiaux (materiel) values (?)";
+            String sql = "INSERT INTO Materiaux (materiel,idStyle) values (?,?)";
             try {
                  pst = c.prepareStatement(sql);
+               
                 pst.setString(1, m);
+                pst.setInt(2,parseInt(idStyle));
                 pst.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
