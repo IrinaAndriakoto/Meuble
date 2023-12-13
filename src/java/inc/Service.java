@@ -15,37 +15,72 @@ import model.*;
 
 public class Service {
     
+    
         public Connection getConnection() throws Exception{
-        Connection c = null;
-        String conn = "jdbc:postgresql://localhost:5432/meuble";
-       
-        try{
-            Class.forName("org.postgresql.Driver");
-            c = DriverManager.getConnection(conn, "postgres", "irina");
-            return c;
-        }catch(Exception e){
-            throw e;
+            Connection c = null;
+            String conn = "jdbc:postgresql://localhost:5432/meuble";
+
+            try{
+                Class.forName("org.postgresql.Driver");
+                c = DriverManager.getConnection(conn, "postgres", "irina");
+                return c;
+            }catch(SQLException e){
+                throw e;
+            }
         }
-    }
-        public static void insertStyle(Connection c , Style s) throws Exception {
-            String sql = "INSERT INTO Style (style) values (?)";
-            PreparedStatement pst = c.prepareStatement(sql);
-            pst.setString(1, s.getStyle());
-            pst.executeUpdate();
+        
+        public void closeConnection(Connection connection) {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-            
-        public static void insertMateriel(Connection c , Materiel m) throws Exception {
-        String sql = "INSERT INTO Materiel (materiel) values (?)";
-        PreparedStatement pst = c.prepareStatement(sql);
-        pst.setString(1, m.getMateriel());
-        pst.executeUpdate();
-    }
+        public void insertStyle(Connection c, String style) throws Exception {
+            PreparedStatement pst = null;
+            String sql = "INSERT INTO style (style) values (?)";
+            try {
+                 pst = c.prepareStatement(sql);
+                pst.setString(1, style);
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+             finally {
+                if (pst != null) {
+                    pst.close();
+            }
+        }
+        }
+
+        public void insertMateriel(Connection c, String m) throws Exception {
+            PreparedStatement pst = null;
+            String sql = "INSERT INTO Materiaux (materiel) values (?)";
+            try {
+                 pst = c.prepareStatement(sql);
+                pst.setString(1, m);
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+             finally {
+                if (pst != null) {
+                    pst.close();
+            }
+        }
+        }
             
     public List<Materiel> getAllMateriel() throws Exception {
         List<Materiel> materiels = new ArrayList<>();
-        try(Connection connection = getConnection()) {
-            String sql = "SELECT * FROM materiel";
-            try (PreparedStatement statement = connection.prepareStatement(sql);
+        Connection con = null;
+        try {
+            con = getConnection();
+            String sql = "SELECT * FROM materiaux";
+            try (PreparedStatement statement = con.prepareStatement(sql);
                  ResultSet resultSet = statement.executeQuery()) {
 
                 while (resultSet.next()) {
@@ -53,8 +88,8 @@ public class Service {
                     
 //                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
                     produit.setIdMateriel(resultSet.getInt("idMateriel"));
-                    produit.setMateriel(resultSet.getString("matricule"));
-                    produit.setIdStyle(resultSet.getInt("idStyles"));
+                    produit.setMateriel(resultSet.getString("materiel"));
+                    produit.setIdStyle(resultSet.getInt("idStyle"));
                 // Ajoutez d'autres propriétés en fonction de votre modèle de données
                     materiels.add(produit);
                 }
@@ -66,15 +101,20 @@ public class Service {
         } catch (Exception e) {
             throw e; // Gérez les exceptions de manière appropriée dans votre application
         }
+        finally {
+            closeConnection(con); // Close the connection in the finally block
+        }
 
         return materiels;
     }
 
     public List<Style> getAllStyle() throws Exception {
         List<Style> styles = new ArrayList<>();
-        try(Connection connection = getConnection()) {
+        Connection con = null;
+        try{
+            con = getConnection();
             String sql = "SELECT * FROM style";
-            try (PreparedStatement statement = connection.prepareStatement(sql);
+            try (PreparedStatement statement = con.prepareStatement(sql);
                  ResultSet resultSet = statement.executeQuery()) {
 
                 while (resultSet.next()) {
@@ -93,6 +133,8 @@ public class Service {
             }
         } catch (Exception e) {
             throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }finally{
+            closeConnection(con);
         }
 
         return styles;
