@@ -1,16 +1,15 @@
 <%-- 
-    Document   : materiauxPage.jsp
-    Created on : 14 déc. 2023, 09:50:54
+    Document   : materiauxpage
+    Created on : 14 déc. 2023, 09:56:06
     Author     : Irina
 --%>
-
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.Materiel" %>
 <%@ page import="java.util.List" %>
 <html>
 <head>
-    <title>Materiaux</title>
+    <title>Materiel</title>
     <!-- Ajoutez vos styles ou liens vers des bibliothèques ici -->
 </head>
 <body>
@@ -25,7 +24,7 @@
     <% if (materiauxList != null && !materiauxList.isEmpty()) { %>
         <ul>
         <% for (Materiel materiau : materiauxList) { %>
-            <li><%= materiau.getNom() %></li>
+            <li><%= materiau.getMateriel() %></li>
         <% } %>
         </ul>
     <% } else { %>
@@ -38,5 +37,3 @@
 </body>
 </html>
 
-    </body>
-</html>

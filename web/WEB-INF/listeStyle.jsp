@@ -35,7 +35,7 @@
 <% } %>
 
 
-<div id="materiaux-container"></div>
+<!--<div id="materiaux-container"></div>-->
 
         <a href="index.html">Retourner a la page d'accueil.</a>
 
