@@ -25,15 +25,43 @@
         %>
 
 <% if (st != null && !st.isEmpty()) { %>
-    <% for (int i = 0; i < st.size(); i++) { %>
     <ul>
-        <li><%= st.get(i).getStyle() %></li>
-    </ul>
+    <% for (int i = 0; i < st.size(); i++) { %>
+        <li><a href="MateriauxServlet?idStyle=<%= st.get(i).getIdStyle() %>"><%= st.get(i).getStyle() %></a></li>
     <% } %>
+    </ul>
 <% } else { %>
     <p> Aucun produit disponible. </p>
 <% } %>
 
+
+<div id="materiaux-container"></div>
+
+        <a href="index.html">Retourner a la page d'accueil.</a>
+
 </body>
 </html>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<!--<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var styleLinks = document.querySelectorAll('.style-link');
+
+        styleLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                var styleId = this.getAttribute('data-style-id');
+                loadMateriaux(styleId);
+            });
+        });
+
+        function loadMateriaux(styleId) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById('materiaux-container').innerHTML = xhr.responseText;
+                }
+            };
+
+            xhr.open('GET', 'MateriauxServlet?idStyle=' + styleId, true);
+            xhr.send();
+        }
+    });
+</script>-->

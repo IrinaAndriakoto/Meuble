@@ -33,6 +33,7 @@
 <% } else { %>
     <p> Aucun produit disponible. </p>
 <% } %>
+        <a href="index.html">Retourner a la page d'accueil.</a>
 
 </body>
 </html>

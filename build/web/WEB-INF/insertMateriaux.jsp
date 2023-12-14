@@ -1,7 +1,6 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="model.*" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="model.Style" %>
 <%@ page import="java.util.List" %>
-<!DOCTYPE html>
 <html>
     <head> 
         <title></title>

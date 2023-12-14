@@ -76,7 +76,42 @@ public class Service {
             }
         }
         }
-            
+        
+        public List<Materiel> getMaterielByStyle(String idStyle) throws Exception
+        {
+           Connection con =null;
+           List<Materiel> materiels = new ArrayList<>();
+
+           try{
+               con=getConnection();
+               String sql = "Select * from materiaux where idStyle = ? ";
+               try{
+                   PreparedStatement stat = con.prepareStatement(sql);
+                   stat.setInt(1,parseInt(idStyle));
+                   ResultSet res = stat.executeQuery();
+                   
+                   while(res.next()) {
+                       Materiel materiel = new Materiel();
+                        materiel.setIdMateriel(res.getInt("idMateriel"));
+                        materiel.setMateriel(res.getString("materiel"));
+                        materiel.setIdStyle(res.getInt("idStyle"));
+                        // Ajoutez d'autres propriétés en fonction de votre modèle de données
+                        
+                        materiels.add(materiel);
+                   }
+               }
+               catch(SQLException e){
+                   e.printStackTrace();
+                   throw e;
+               }
+           }finally {
+        if (con != null) {
+            con.close();
+        }
+    }
+        return materiels;   
+    }
+                    
     public List<Materiel> getAllMateriel() throws Exception {
         List<Materiel> materiels = new ArrayList<>();
         Connection con = null;
