@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.Materiel" %>
 <%@ page import="java.util.List" %>
+<%@ page import="model.V_getStyleMateriel" %>
 <html>
 <head>
     <title>Materiel</title>
@@ -16,14 +17,14 @@
     <h2>Matériaux :</h2>
 
     <% 
-       List<Materiel> materiauxList = null;
+       List<V_getStyleMateriel> materiauxList = null;
     
-     materiauxList = (List<Materiel>) request.getAttribute("materiauxList");
+     materiauxList = (List<V_getStyleMateriel>) request.getAttribute("materiauxList");
     %>
 
     <% if (materiauxList != null && !materiauxList.isEmpty()) { %>
         <ul>
-        <% for (Materiel materiau : materiauxList) { %>
+        <% for (V_getStyleMateriel materiau : materiauxList) { %>
             <li><%= materiau.getMateriel() %></li>
         <% } %>
         </ul>

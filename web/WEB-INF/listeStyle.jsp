@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.Style" %>
+<%@ page import="model.Materiel" %>
 <%@ page import="java.util.List" %>
 <html>
 <head>
@@ -14,14 +15,15 @@
 
 </head>
 <body>
-    <h2>Styles :</h2>
+    <h2>Styles disponibles :</h2>
 
         <% 
            List<Style> st = null;
         
          st = (List<Style>) request.getAttribute("liste_style");
 //        out.println(st.size());
-    
+        List<Materiel> mt = (List<Materiel>) request.getAttribute("listMatr");
+        
         %>
 
 <% if (st != null && !st.isEmpty()) { %>
@@ -34,8 +36,29 @@
     <p> Aucun produit disponible. </p>
 <% } %>
 
+<br> 
 
-<!--<div id="materiaux-container"></div>-->
+<h2>Inserer des materiaux aux styles.</h2>
+    
+<form action="MateriauxServlet" method="post">
+    <label for="style">Style</label>
+    <select name="style">
+        <% for(int i=0;i<st.size();i++) { %>
+        <option value="<%= st.get(i).getIdStyle() %>"><%= st.get(i).getStyle() %></option>
+        <% } %>
+    </select>
+    <br><!-- comment -->
+    <label for="materiel">Materiel</label>
+    <select name="materiel" >
+        <% for(int i=0;i<mt.size();i++) { %>
+        <option value="<%= mt.get(i).getIdMateriel() %>"><%= mt.get(i).getMateriel() %></option>
+        <% } %>
+    </select>
+    <input type="submit" value="Inserer">
+</form>
+    
+
+<!--<div id="materiaux-container"></div>-->.
 
         <a href="index.html">Retourner a la page d'accueil.</a>
 

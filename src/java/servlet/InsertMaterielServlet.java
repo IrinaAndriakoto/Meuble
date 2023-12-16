@@ -24,11 +24,11 @@ public class InsertMaterielServlet extends HttpServlet {
         throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         try{
-                 Service dataService = new Service();
-        request.setAttribute("connection",dataService.getConnection());
-                 List<Style> list = dataService.getAllStyle();
-                 request.setAttribute("liste_style", list);
-        
+//                 Service dataService = new Service();
+//        request.setAttribute("connection",dataService.getConnection());
+//                 List<Style> list = dataService.getAllStyle();
+//                 request.setAttribute("liste_style", list);
+//        
         // Redirigez vers la page JSP d'affichage
         request.getRequestDispatcher("WEB-INF/insertMateriaux.jsp").forward(request, response);
         }catch(Exception e){
@@ -54,7 +54,7 @@ public class InsertMaterielServlet extends HttpServlet {
             
             String idStyle = request.getParameter("style");
             
-            dataService.insertMateriel(connection, MatrValue,idStyle);
+            dataService.insertMateriel(connection, MatrValue);
 
             // Fermer la connexion
             connection.close();
@@ -65,7 +65,7 @@ public class InsertMaterielServlet extends HttpServlet {
             e.printStackTrace();
             // Rediriger vers une page d'erreur avec le message d'erreur approprié
             request.setAttribute("errorMessage", "Une erreur s'est produite lors de l'insertion du style : " + e.getMessage());
-            RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/error.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
             rd.forward(request, response);
             // Gérer les erreurs SQL (par exemple, afficher un message d'erreur)
         } finally {

@@ -57,14 +57,14 @@ public class Service {
         }
         }
 
-        public void insertMateriel(Connection c, String m, String idStyle) throws Exception {
+        public void insertMateriel(Connection c, String m) throws Exception {
             PreparedStatement pst = null;
-            String sql = "INSERT INTO Materiaux (materiel,idStyle) values (?,?)";
+            String sql = "INSERT INTO Materiaux (materiel) values (?)";
             try {
                  pst = c.prepareStatement(sql);
                
                 pst.setString(1, m);
-                pst.setInt(2,parseInt(idStyle));
+//                pst.setInt(2,parseInt(idStyle));
                 pst.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -77,27 +77,44 @@ public class Service {
         }
         }
         
-        public List<Materiel> getMaterielByStyle(String idStyle) throws Exception
+        public void InsertStyleMateriel(Connection c,String idStyle,String idMateriel) throws Exception{
+            Connection con = null;
+            PreparedStatement pst = null;
+            String sql = "insert into stylemateriel(idStyle,idMateriel) values(?,?) ";
+            try{
+                pst = c.prepareStatement(sql);
+                pst.setInt(1,parseInt(idStyle));
+                pst.setInt(2,parseInt(idMateriel));
+                pst.executeUpdate();
+            }catch(Exception e){
+                e.printStackTrace();
+                throw e;                
+            }finally{
+                closeConnection(con);
+            }
+        }
+        
+        public List<V_getStyleMateriel> getMaterielByStyle(String idStyle) throws Exception
         {
            Connection con =null;
-           List<Materiel> materiels = new ArrayList<>();
+           List<V_getStyleMateriel> sm = new ArrayList<>();
 
            try{
                con=getConnection();
-               String sql = "Select * from materiaux where idStyle = ? ";
+               String sql ="select style,materiel from v_getstylemateriel where idstyle=?";
                try{
                    PreparedStatement stat = con.prepareStatement(sql);
                    stat.setInt(1,parseInt(idStyle));
                    ResultSet res = stat.executeQuery();
                    
                    while(res.next()) {
-                       Materiel materiel = new Materiel();
-                        materiel.setIdMateriel(res.getInt("idMateriel"));
-                        materiel.setMateriel(res.getString("materiel"));
-                        materiel.setIdStyle(res.getInt("idStyle"));
+                       V_getStyleMateriel mt = new V_getStyleMateriel();
+                        mt.setMateriel(res.getString("materiel"));
+                        mt.setStyle(res.getString("style"));
+//                        materiel.setIdStyle(res.getInt("idStyle"));
                         // Ajoutez d'autres propriétés en fonction de votre modèle de données
                         
-                        materiels.add(materiel);
+                        sm.add(mt);
                    }
                }
                catch(SQLException e){
@@ -109,7 +126,7 @@ public class Service {
             con.close();
         }
     }
-        return materiels;   
+        return sm;   
     }
                     
     public List<Materiel> getAllMateriel() throws Exception {
@@ -127,7 +144,7 @@ public class Service {
 //                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
                     produit.setIdMateriel(resultSet.getInt("idMateriel"));
                     produit.setMateriel(resultSet.getString("materiel"));
-                    produit.setIdStyle(resultSet.getInt("idStyle"));
+//                    produit.setIdStyle(resultSet.getInt("idStyle"));
                 // Ajoutez d'autres propriétés en fonction de votre modèle de données
                     materiels.add(produit);
                 }

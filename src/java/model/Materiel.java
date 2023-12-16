@@ -11,7 +11,6 @@ package model;
 public class Materiel {
     private int idMateriel;
     private String Materiel;
-    private int idStyle;
 
     public int getIdMateriel() {
         return idMateriel;
@@ -28,14 +27,4 @@ public class Materiel {
     public void setMateriel(String Materiel) {
         this.Materiel = Materiel;
     }
-
-    public int getIdStyle() {
-        return idStyle;
-    }
-
-    public void setIdStyle(int idStyle) {
-        this.idStyle = idStyle;
-    }
-    
-    
 }
