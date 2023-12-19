@@ -9,7 +9,7 @@
         <!-- <div id="header1"></div> -->
     <center>
         <div id="all">
-        <form method="get" action="index.jsp">
+        <form method="post" action="index.jsp">
             <h1>Ins&eacute;rez le style de votre meuble</h1>
             <input type="text" name="style" class="form-control">
             <input type="submit" value="Inserer">
