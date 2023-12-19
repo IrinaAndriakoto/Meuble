@@ -41,7 +41,7 @@ public class InsertStyleServlet extends HttpServlet {
             connection.close();
 
             // Rediriger vers une page de confirmation ou une autre page appropriée
-            response.sendRedirect(request.getContextPath() + "confirmation.jsp");
+            response.sendRedirect("confirmation.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             // Rediriger vers une page d'erreur avec le message d'erreur approprié

@@ -5,7 +5,7 @@
             <url>src/java/servlet/MaterielStyleServlet.java</url>
             <bookmark id="1">
                 <name/>
-                <line>39</line>
+                <line>41</line>
                 <key/>
             </bookmark>
         </file>
@@ -17,18 +17,21 @@
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/MaterielStyleServlet.java</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/confirmation.jsp</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/listeMateriaux.jsp</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/model/Materiel.java</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/model/V_getStyleMateriel.java</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/InsertStyleServlet.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/ListeStyleServlet.java</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/model/Materiel.java</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/error.jsp</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/ListeStyleServlet.java</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/ListeMateriauxServlet.java</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/web.xml</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/insertStyle.jsp</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/materiauxPage.jsp</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/model/Style.java</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/index.html</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/connect/Connexion.java</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/insertMateriaux.jsp</file>
             <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/listeStyle.jsp</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/model/StyleMateriel.java</file>
         </group>
     </open-files>
 </project-private>

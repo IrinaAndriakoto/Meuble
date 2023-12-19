@@ -10,6 +10,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <link rel="stylesheet" href="index.css">
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/style.css" rel="stylesheet">
+    </head>
     </head>
     <body>
     <%-- Affichage du message d'erreur --%>
@@ -17,5 +21,6 @@
         <p style="color: red;">${requestScope.errorMessage}</p>
     </c:if>
         <p style="color: red;">${err}</p>
+          
     </body>
 </html>

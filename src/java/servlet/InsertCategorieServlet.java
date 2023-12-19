@@ -10,12 +10,20 @@ package servlet;
  */
 import inc.Service;
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
 import java.sql.*;
 
-public class InsertStyleServlet extends HttpServlet {
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+@WebServlet("/insertCategorie")
+public class InsertCategorieServlet extends HttpServlet {
+    
+        protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+            request.getRequestDispatcher("WEB-INF/insertCategorie.jsp").forward(request, response);
+        }
+        
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String categorie = request.getParameter("categorie");
 
         Connection connection = null;
@@ -38,7 +46,7 @@ public class InsertStyleServlet extends HttpServlet {
             e.printStackTrace();
             // Rediriger vers une page d'erreur avec le message d'erreur approprié
             request.setAttribute("errorMessage", "Une erreur s'est produite lors de l'insertion de la categorie : " + e.getMessage());
-            RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/error.jsp");
             rd.forward(request, response);
             // Gérer les erreurs SQL (par exemple, afficher un message d'erreur)
         } finally {

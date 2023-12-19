@@ -78,13 +78,30 @@ public class Service {
         }
         
         public void InsertStyleMateriel(Connection c,String idStyle,String idMateriel) throws Exception{
-            Connection con = null;
+//            Connection con = null;
             PreparedStatement pst = null;
             String sql = "insert into stylemateriel(idStyle,idMateriel) values(?,?) ";
             try{
                 pst = c.prepareStatement(sql);
                 pst.setInt(1,parseInt(idStyle));
                 pst.setInt(2,parseInt(idMateriel));
+                pst.executeUpdate();
+            }catch(Exception e){
+                e.printStackTrace();
+                throw e;                
+            }finally{
+                closeConnection(c);
+            }
+        }
+        
+        public void insertCategorie(Connection con , String cat) throws Exception {
+//                        Connection con = null;
+            PreparedStatement pst = null;
+            String sql = "insert into categorie(categorie) values(?) ";
+            try{
+                pst = con.prepareStatement(sql);
+                pst.setString(1,cat);
+//                pst.setInt(2,parseInt(idMateriel));
                 pst.executeUpdate();
             }catch(Exception e){
                 e.printStackTrace();
