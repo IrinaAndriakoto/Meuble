@@ -110,6 +110,87 @@ public class Service {
                 closeConnection(con);
             }
         }
+        public List<Taille> getAllTaille() throws Exception {
+        List<Taille> tailles = new ArrayList<>();
+        Connection con = null;
+        try{
+            con = getConnection();
+            String sql = "SELECT * FROM Taille";
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    Taille taille = new Taille();
+                    
+                    taille.setIdTaille(resultSet.getInt("idTaille"));
+                    taille.setTaille(resultSet.getString("taille"));
+                    
+                    tailles.add(taille);
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }finally{
+            closeConnection(con);
+        }
+
+        return tailles;
+    }
+    
+    public List<Categorie> getAllCategorie() throws Exception {
+        List<Categorie> categs = new ArrayList<>();
+        Connection con = null;
+        try{
+            con = getConnection();
+            String sql = "SELECT * FROM Categorie";
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    Categorie categ = new Categorie();
+                    
+//                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
+                    categ.setIdCategorie(resultSet.getInt("idCategorie"));
+                    categ.setCategorie(resultSet.getString("categorie"));
+                // Ajoutez d'autres propriétés en fonction de votre modèle de données
+                    categs.add(categ);
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }finally{
+            closeConnection(con);
+        }
+
+        return categs;
+    }
+    
+    public void insertTaille(Connection c, String t) throws Exception {
+            PreparedStatement pst = null;
+            String sql = "INSERT INTO Taille (taille) values (?)";
+            try {
+                 pst = c.prepareStatement(sql);
+               
+                pst.setString(1, t);
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+             finally {
+                if (pst != null) {
+                    pst.close();
+            }
+        }
+    }
         
         public List<V_getStyleMateriel> getMaterielByStyle(String idStyle) throws Exception
         {
