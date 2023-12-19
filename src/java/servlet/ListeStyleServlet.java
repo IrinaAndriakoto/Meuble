@@ -32,7 +32,9 @@ public class ListeStyleServlet extends HttpServlet {
                  Service dataService = new Service();
         request.setAttribute("connection",dataService.getConnection());
                  List<Style> list = dataService.getAllStyle();
+                 List<Materiel> listMat = dataService.getAllMateriel();
                  request.setAttribute("liste_style", list);
+                 request.setAttribute("listMatr",listMat);
         
         // Redirigez vers la page JSP d'affichage
         request.getRequestDispatcher("/WEB-INF/listeStyle.jsp").forward(request, response);

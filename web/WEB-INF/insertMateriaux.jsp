@@ -1,7 +1,6 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="model.*" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="model.Style" %>
 <%@ page import="java.util.List" %>
-<!DOCTYPE html>
 <html>
     <head> 
         <title></title>
@@ -10,9 +9,7 @@
             <link href="assets/css/bootstrap.min.css" rel="stylesheet">
             <link href="../assets/css/style.css" rel="stylesheet">
     </head>
-    <% 
-       List<Style> styles = (List<Style>) request.getAttribute("liste_style");
-    %>
+
     <body>
         <center>
             <h1>Ins&eacute;rez les mati&egrave;res pour votre meuble </h1>

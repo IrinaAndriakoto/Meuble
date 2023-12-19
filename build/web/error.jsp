@@ -12,9 +12,10 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <% 
-            String err = request.getAttribute("errorMessage");
-        %>
+    <%-- Affichage du message d'erreur --%>
+    <c:if test="${not empty requestScope.errorMessage}">
+        <p style="color: red;">${requestScope.errorMessage}</p>
+    </c:if>
         <p style="color: red;">${err}</p>
     </body>
 </html>
