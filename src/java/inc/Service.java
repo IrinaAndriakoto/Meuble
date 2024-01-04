@@ -191,6 +191,24 @@ public class Service {
             }
         }
     }
+    
+    public void insertQuantiteMateriel(Connection co,String idCategorie,String idMatr ,String idTaille , String idStyle , String qte) throws Exception{
+        try{
+            String sql="insert into quantitemateriel(quantite,idtaille,idcategorie,idmateriel,idstyle) values(?,?,?,?,?) ";
+            PreparedStatement pst = co.prepareStatement(sql);
+            pst.setInt(1,parseInt(qte));
+            pst.setInt(2,parseInt(idTaille));
+            pst.setInt(3,parseInt(idCategorie));
+            pst.setInt(4,parseInt(idMatr));
+            pst.setInt(5,parseInt(idStyle));
+            
+            pst.executeUpdate();
+        }catch(SQLException e){
+            throw e;
+        }finally{
+            closeConnection(co);
+        }
+    }
         
         public List<V_getStyleMateriel> getMaterielByStyle(String idStyle) throws Exception
         {
@@ -226,7 +244,44 @@ public class Service {
     }
         return sm;   
     }
+        
+            public List<V_getquantitemateriel> getAllQuantite() throws Exception {
+        List<V_getquantitemateriel> qte = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = getConnection();
+            String sql = "SELECT * FROM v_getquantite order by categorie,style";
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    V_getquantitemateriel produit = new V_getquantitemateriel();
                     
+//                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
+                    produit.setQuantite(resultSet.getInt("quantite"));
+                    produit.setTaille(resultSet.getString("taille"));
+                    produit.setCategorie(resultSet.getString("categorie"));
+                    produit.setMateriaux(resultSet.getString("materiel"));
+                    produit.setStyle(resultSet.getString("style"));
+//                    produit.setIdStyle(resultSet.getInt("idStyle"));
+                // Ajoutez d'autres propriétés en fonction de votre modèle de données
+                    qte.add(produit);
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }
+        finally {
+            closeConnection(con); // Close the connection in the finally block
+        }
+
+        return qte;
+    }
+            
     public List<Materiel> getAllMateriel() throws Exception {
         List<Materiel> materiels = new ArrayList<>();
         Connection con = null;

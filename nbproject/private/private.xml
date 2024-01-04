@@ -11,6 +11,14 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/inc/Service.java</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/model/V_getquantitemateriel.java</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/FabricationServlet.java</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/QuantiteServlet.java</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/fabrication.jsp</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/MaterielStyleServlet.java</file>
+            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/materiauxPage.jsp</file>
+        </group>
     </open-files>
 </project-private>

@@ -51,9 +51,7 @@ public class InsertMaterielServlet extends HttpServlet {
             Service dataService = new Service();
                  connection = dataService.getConnection();
             request.setAttribute("connection",connection);
-            
-            String idStyle = request.getParameter("style");
-            
+
             dataService.insertMateriel(connection, MatrValue);
 
             // Fermer la connexion

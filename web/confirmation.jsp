@@ -16,5 +16,6 @@
     </head>
     <body>
         <h1>Insertion reussie.</h1>
+        <a href="index.html">Retourner a la page d'accueil.</a>
     </body>
 </html>
