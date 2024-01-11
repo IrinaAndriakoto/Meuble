@@ -192,6 +192,26 @@ public class Service {
         }
     }
     
+    public void insertStock(Connection c, String qte,String idmat) throws Exception {
+            PreparedStatement pst = null;
+            String sql = "INSERT INTO stock (quantitestock,idmateriel) values (?,?)";
+            try {
+                 pst = c.prepareStatement(sql);
+               
+                pst.setInt(1, parseInt(qte));
+                pst.setInt(2, parseInt(idmat));
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+             finally {
+                if (pst != null) {
+                    pst.close();
+            }
+        }
+    }
+    
     public void insertQuantiteMateriel(Connection co,String idCategorie,String idMatr ,String idTaille , String idStyle , String qte) throws Exception{
         try{
             String sql="insert into quantitemateriel(quantite,idtaille,idcategorie,idmateriel,idstyle) values(?,?,?,?,?) ";
@@ -380,5 +400,79 @@ public class Service {
         }
 
         return prix;
+    }
+    
+        public void insertCommande(Connection con,String nb,String idcat,String idstyle,String idtaille) throws Exception {
+        PreparedStatement pst = null;
+            String sql = "insert into commande(nbCommande,idCategorie , idStyle , idTaille) values(?,?,?,?) ";
+            try{
+                pst = con.prepareStatement(sql);
+                pst.setInt(1,parseInt(nb));
+                pst.setInt(2,parseInt(idcat));
+                pst.setInt(3,parseInt(idstyle));
+                pst.setInt(4,parseInt(idtaille));
+                
+                pst.executeUpdate();
+            }catch(Exception e){
+                e.printStackTrace();
+                throw e;                
+            }finally{
+                con.close();
+            }
+    }
+        public List<V_getCommande> getAllCommande() throws Exception {
+        List<V_getCommande> commandes = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = getConnection();
+            String sql = "SELECT * FROM v_getCommande";
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    V_getCommande produit = new V_getCommande();
+                    
+                    produit.setIdCommande(resultSet.getString("idcommande"));
+                    produit.setNbCommande(resultSet.getInt("nbCommande"));
+                    produit.setTaille(resultSet.getString("taille"));
+                    produit.setStyle(resultSet.getString("style"));
+                    produit.setCategorie(resultSet.getString("categorie"));
+                    commandes.add(produit);
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }
+        finally {
+            closeConnection(con); // Close the connection in the finally block
+        }
+
+        return commandes;
+    }
+        
+        public void valider(Connection c, String idcomm , boolean isValid , String idQuantite) throws Exception {
+            PreparedStatement pst = null;
+            String sql = "INSERT INTO validation (idcommande , isValid , idQuantite ) values (? , 1 , ?)";
+            try {
+                 pst = c.prepareStatement(sql);
+               
+                pst.setInt(1, parseInt(idcomm));
+                pst.setBoolean(2, isValid);
+                pst.setInt(3, parseInt(idQuantite));
+                
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+             finally {
+                if (pst != null) {
+                    pst.close();
+            }
+        }
     }
 }
