@@ -11,25 +11,7 @@ package model;
 public class Materiel {
     private int idMateriel;
     private String Materiel;
-    private int quantitePetit;
-    private int quantiteGrand;
-
-    public int getQuantitePetit() {
-        return quantitePetit;
-    }
-
-    public void setQuantitePetit(int quantitePetit) {
-        this.quantitePetit = quantitePetit;
-    }
-
-    public int getQuantiteGrand() {
-        return quantiteGrand;
-    }
-
-    public void setQuantiteGrand(int quantiteGrand) {
-        this.quantiteGrand = quantiteGrand;
-    }
-    
+    private Double pu;
     
     
     public int getIdMateriel() {
@@ -47,4 +29,14 @@ public class Materiel {
     public void setMateriel(String Materiel) {
         this.Materiel = Materiel;
     }
+
+    public Double getPu() {
+        return pu;
+    }
+
+    public void setPu(Double pu) {
+        this.pu = pu;
+    }
+    
+    
 }

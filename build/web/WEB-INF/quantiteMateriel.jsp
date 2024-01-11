@@ -22,7 +22,7 @@
     <center>
         <div id="all">
         <form method="post" action="quantitemateriel">
-            <h1>Creation de votre meuble</h1>
+            <h1>Insertion quantite par materiel</h1>
            <p> <select name="categorie">
             <% for (int i=0; i<categorie.size(); i++) 
                 { %>

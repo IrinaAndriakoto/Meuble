@@ -347,5 +347,38 @@ public class Service {
 
         return styles;
     }
-    
+    public List<V_getPrixMateriel> getAllMeubleByPrix(String prixMin , String prixMax) throws Exception {
+        List<V_getPrixMateriel> prix = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = getConnection();
+            String sql = "SELECT * FROM v_getprixmateriel where prix>"+prixMin+" and prix<"+prixMax+" ";
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    V_getPrixMateriel produit = new V_getPrixMateriel();
+                    
+//                    produit.setIdMeuble(resultSet.getString("idmeuble"));
+                    produit.setNomCategorie(resultSet.getString("nomcategorie"));
+                    produit.setTaille(resultSet.getString("taille"));
+                    produit.setNomStyle(resultSet.getString("nomstyle"));
+                    produit.setPrix(resultSet.getDouble("prix"));
+//                    produit.setMateriel(resultSet.getString("materiel"));
+                    prix.add(produit);
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }
+        finally {
+            closeConnection(con); // Close the connection in the finally block
+        }
+
+        return prix;
+    }
 }
