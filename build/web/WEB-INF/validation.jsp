@@ -25,8 +25,9 @@
     <h1>Liste Commande</h1>
     
     
-    <table>
+    <table border="1" width="200px">
         <tr>
+            <th>Id Commande</th>
             <th>nbCommande</th>
             <th>Categorie</th>
             <th>Taille</th>

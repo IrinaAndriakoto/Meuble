@@ -46,7 +46,7 @@ public class InsertCategorieServlet extends HttpServlet {
             e.printStackTrace();
             // Rediriger vers une page d'erreur avec le message d'erreur approprié
             request.setAttribute("errorMessage", "Une erreur s'est produite lors de l'insertion de la categorie : " + e.getMessage());
-            RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/error.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
             rd.forward(request, response);
             // Gérer les erreurs SQL (par exemple, afficher un message d'erreur)
         } finally {

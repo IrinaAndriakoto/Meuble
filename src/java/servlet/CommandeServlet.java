@@ -4,6 +4,7 @@
  */
 package servlet;
 
+import exception.InsufficientMaterialsException;
 import inc.Service;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -80,20 +81,31 @@ public class CommandeServlet extends HttpServlet{
                 Service serv = new Service();
                 connection = serv.getConnection();
                 request.setAttribute("connection",connection);
-                serv.insertCommande(connection, quantite, categ, style, taille);
-            
-                            // Fermer la connexion
-                    connection.close();
+                
+                try{
+                    serv.insertCommande(connection, quantite, categ, style, taille); 
+                                        connection.close();
 
                     // Rediriger vers une page de confirmation ou une autre page appropriée
                     response.sendRedirect("confirmation.jsp");
+                }
+                catch(InsufficientMaterialsException e){
+                    e.printStackTrace();
+                                // Redirigez vers la page d'erreur avec le message d'erreur approprié
+            request.setAttribute("errorMessage", e.getMessage());
+            RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
+            rd.forward(request, response);
+                }
+            
+                            // Fermer la connexion
+
             }
             catch(Exception e){
             e.printStackTrace();
-            // Rediriger vers une page d'erreur avec le message d'erreur approprié
-            request.setAttribute("errorMessage", "Une erreur s'est produite lors de l'insertion du style : " + e.getMessage());
-            RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
-            rd.forward(request, response);
+//            // Rediriger vers une page d'erreur avec le message d'erreur approprié
+//            request.setAttribute("errorMessage", "Une erreur s'est produite lors de l'insertion du style : " + e.getMessage());
+//            RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
+//            rd.forward(request, response);
   
         }
          finally {

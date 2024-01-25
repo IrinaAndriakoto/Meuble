@@ -12,6 +12,7 @@ public class Materiel {
     private int idMateriel;
     private String Materiel;
     private Double pu;
+//    private String unite;
     
     
     public int getIdMateriel() {

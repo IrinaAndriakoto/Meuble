@@ -74,7 +74,7 @@ public class ValidationServlet extends HttpServlet{
                 Service serv = new Service();
                 connection = serv.getConnection();
                 request.setAttribute("connection",connection);
-                serv.valider(connection, idcommande, v, style, taille);
+//                serv.valider(connection, idcommande, v, style, taille);
             
                             // Fermer la connexion
                     connection.close();

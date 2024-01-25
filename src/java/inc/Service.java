@@ -8,9 +8,13 @@ package inc;
  *
  * @author Irina
  */
+import exception.InsufficientMaterialsException;
 import static java.lang.Integer.parseInt;
 import java.sql.*;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import model.*;
 
@@ -406,6 +410,12 @@ public class Service {
         PreparedStatement pst = null;
             String sql = "insert into commande(nbCommande,idCategorie , idStyle , idTaille) values(?,?,?,?) ";
             try{
+                
+                            // Vérifier la disponibilité des matériaux dans le stock
+            if (!checkMaterialsAvailability(con, idstyle,nb)) {
+                throw new InsufficientMaterialsException("Il n'y a pas assez de matériaux disponibles.");
+            }
+            
                 pst = con.prepareStatement(sql);
                 pst.setInt(1,parseInt(nb));
                 pst.setInt(2,parseInt(idcat));
@@ -413,12 +423,78 @@ public class Service {
                 pst.setInt(4,parseInt(idtaille));
                 
                 pst.executeUpdate();
-            }catch(Exception e){
-                e.printStackTrace();
-                throw e;                
-            }finally{
+                
+                ResultSet generatedKeys = pst.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int orderId = generatedKeys.getInt(1);
+
+                    // Étapes 2, 3 et 4 : Récupérez les informations et mettez à jour le stock
+                    updateStockAfterCommande(con, orderId);
+                } else {
+                    throw new SQLException("Échec de récupération de l'ID de commande généré.");
+                }
+            }
+         catch (SQLException e) {
+            throw e;
+        }finally{
                 con.close();
             }
+    }
+    
+    public void updateStockAfterCommande(Connection connection, int orderId) throws SQLException {
+        // ... code précédent pour récupérer les informations et mettre à jour le stock ...
+        String selectCommandeInfo = "SELECT idstyle, idcategorie, idtaille FROM commande WHERE idcommande = ?";
+        PreparedStatement selectCommandeInfoStmt = connection.prepareStatement(selectCommandeInfo);
+        selectCommandeInfoStmt.setInt(1, orderId);
+        ResultSet commandeInfoResult = selectCommandeInfoStmt.executeQuery();
+
+        if (commandeInfoResult.next()) {
+            int idStyle = commandeInfoResult.getInt("idstyle");
+            int idCategorie = commandeInfoResult.getInt("idcategorie");
+            int idTaille = commandeInfoResult.getInt("idtaille");
+
+            // Étape 3 : Obtenez les quantités nécessaires de chaque matériau à partir de la table quantitemateriel
+            String selectQuantiteMateriel = "SELECT idmateriel, quantite FROM quantitemateriel WHERE idstyle = ? AND idcategorie = ? AND idtaille = ?";
+            PreparedStatement selectQuantiteMaterielStmt = connection.prepareStatement(selectQuantiteMateriel);
+            selectQuantiteMaterielStmt.setInt(1, idStyle);
+            selectQuantiteMaterielStmt.setInt(2, idCategorie);
+            selectQuantiteMaterielStmt.setInt(3, idTaille);
+            ResultSet quantiteMaterielResult = selectQuantiteMaterielStmt.executeQuery();
+
+            // Étape 4 : Soustrayez ces quantités du stock actuel dans la table stock
+            String updateStock = "UPDATE stock SET quantite = quantite - ? WHERE idmateriel = ?";
+            PreparedStatement updateStockStmt = connection.prepareStatement(updateStock);
+
+            while (quantiteMaterielResult.next()) {
+                int idMateriel = quantiteMaterielResult.getInt("idmateriel");
+                int quantite = quantiteMaterielResult.getInt("quantite");
+
+                updateStockStmt.setInt(1, quantite);
+                updateStockStmt.setInt(2, idMateriel);
+                updateStockStmt.executeUpdate();
+    }
+}
+    }
+ private boolean checkMaterialsAvailability(Connection connection, String id,String nb) throws SQLException {
+        // Implémentez la logique pour vérifier la disponibilité des matériaux dans le stock
+        // Retournez true si suffisamment de matériaux sont disponibles, sinon false
+
+        // Exemple de requête SQL pour vérifier la disponibilité du matériau pour un style donné :
+    String checkAvailabilityQuery = "SELECT COUNT(*) FROM quantitemateriel qm " +
+                                     "WHERE qm.idstyle = ? AND qm.quantite <= (SELECT quantite FROM stock WHERE idmateriel = qm.idmateriel)";
+        try (PreparedStatement checkAvailabilityStmt = connection.prepareStatement(checkAvailabilityQuery)) {
+            checkAvailabilityStmt.setInt(1,parseInt( id));
+            checkAvailabilityStmt.setInt(2, parseInt(nb));
+            ResultSet resultSet = checkAvailabilityStmt.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+
+            return count > 0;
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            throw e;
+        }
     }
         public List<V_getCommande> getAllCommande() throws Exception {
         List<V_getCommande> commandes = new ArrayList<>();
@@ -474,5 +550,176 @@ public class Service {
                     pst.close();
             }
         }
+    }
+        
+        
+    public void insertPersonnel(Connection c,String nom,Date dtn,Date demb) throws Exception {
+        PreparedStatement pst = null;
+        String sql="insert into personnel(nompersonnel,datedenaissance,dateembauche,idmetier) values(?,?,?,1)";
+        
+        try{
+            pst=c.prepareStatement(sql);
+            
+            pst.setString(1,nom);
+            pst.setDate(2, dtn);
+            pst.setDate(3,demb);
+            
+            pst.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+    
+    public void insertMetier(Connection c,String metier,String sph) throws Exception {
+        PreparedStatement pst = null;
+        String sql="insert into metier(metier,salaireparheure) values(?,?)";
+        
+        try{
+            pst=c.prepareStatement(sql);
+            
+            pst.setString(1,metier);
+            pst.setInt(2, Integer.parseInt(sph));
+            
+            pst.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+    
+    public double getSalaireByIdMetier(Connection con,int idmet) {
+        PreparedStatement ps = null;
+        double salaire=0.0;
+        String sql = "select salaireparheure from metier where idmetier= ? ";
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, idmet);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    salaire = rs.getDouble("salaire");
+                }
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return salaire;
+    }
+    
+    public List<Metier> getAllMetier() throws Exception{
+            PreparedStatement pst = null;
+            Connection con = null;
+            List<Metier> metiers = new ArrayList<>();
+        try{
+            con = getConnection();
+            String sql = "SELECT * FROM metier";
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    Metier m = new Metier();
+                    
+//                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
+                    m.setIdMetier(resultSet.getInt("idmetier"));
+                    m.setMetier(resultSet.getString("metier"));
+                // Ajoutez d'autres propriétés en fonction de votre modèle de données
+                    metiers.add(m);
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }finally{
+            closeConnection(con);
+        }
+
+        return metiers;
+    
+    }
+    
+        public int calculerAge(Date dateNaissance) {
+        Calendar dateNaissanceCal = Calendar.getInstance();
+        dateNaissanceCal.setTime(dateNaissance);
+
+        Calendar maintenant = Calendar.getInstance();
+
+        int age = maintenant.get(Calendar.YEAR) - dateNaissanceCal.get(Calendar.YEAR);
+
+        // Vérifier si l'anniversaire n'a pas encore eu lieu cette année
+        if (maintenant.get(Calendar.DAY_OF_YEAR) < dateNaissanceCal.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+
+        return age;
+    }
+        public void checkDate(LocalDate d,Connection c,int idPersonnel)throws Exception{
+        LocalDate now = LocalDate.now();
+        int differenceY = now.getYear()-d.getYear();
+        int differenceM = now.getMonthValue()-d.getMonthValue();
+        int differenceD = now.getDayOfMonth()-d.getDayOfMonth();
+        PreparedStatement pst = null;
+        String sql="";
+        try {
+            if(differenceY==2 && differenceM>=0 && differenceD>=0){
+                sql = "update personnel set idMetier=2 where idPersonnel="+idPersonnel;
+                pst=c.prepareStatement(sql);
+                pst.executeUpdate();
+            }
+            else if(differenceY>=3 && differenceM>=0 && differenceD>=0){
+                sql = "update personnel set idMetier=3 where idPersonnel="+idPersonnel;
+                pst=c.prepareStatement(sql);
+                pst.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+         finally {
+            if (pst != null) {
+                pst.close();
+            }
+        }
+        
+        }
+        
+    public List<V_getListePersonnel> getAllPersonnel() throws Exception{
+              List<V_getListePersonnel> list = new ArrayList<>();
+        Connection con = null;
+        try{
+            con = getConnection();
+            String sql = "SELECT * FROM v_getlistepersonnel";
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    V_getListePersonnel pers = new V_getListePersonnel();
+                    
+//                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
+                    pers.setIdPersonnel(resultSet.getInt("idpersonnel"));
+                    pers.setNomPersonnel(resultSet.getString("nompersonnel"));
+                    pers.setMetier(resultSet.getString("metier"));
+                    pers.setSalaireHeure(resultSet.getDouble("salaireparheure"));
+// Ajoutez d'autres propriétés en fonction de votre modèle de données
+                    list.add(pers);
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }finally{
+            closeConnection(con);
+        }
+
+        return list;
     }
 }
