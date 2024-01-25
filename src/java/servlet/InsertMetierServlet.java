@@ -69,32 +69,39 @@ public class InsertMetierServlet extends HttpServlet {
         // Récupérer le salaire associé à l'idMetier
         double salaireFinal = Double.parseDouble(salaire);
 
-        if ("2".equals(metier)) {
-            // Si le metier sélectionné est idmetier=2, ajuster le salaire
-            double salaireMetier1 = dataService.getSalaireByIdMetier(connection, 1);
-                    // Insérer dans la base de données avec le salaire final
-
-            salaireFinal = salaireMetier1 * 2;
-                    dataService.insertMetier(connection, metier, String.valueOf(salaireFinal));
-            // Fermer la connexion
-            connection.close();
-            // Rediriger vers une page de confirmation ou une autre page appropriée
-            response.sendRedirect("confirmation.jsp");
-        } else if ("3".equals(metier)) {
-            double salaireMetier1 = dataService.getSalaireByIdMetier(connection, 1);
-            salaireFinal=salaireMetier1*3;
-            
-                    // Insérer dans la base de données avec le salaire final
-        dataService.insertMetier(connection, metier, String.valueOf(salaireFinal));
-            // Fermer la connexion
-            connection.close();
-            // Rediriger vers une page de confirmation ou une autre page appropriée
-            response.sendRedirect("confirmation.jsp");
-        } else {
+        if (null == metier) {
             throw new Exception ("Une erreur s'est produite");
-        }
+        } else switch (metier) {
+                case "2":
+                    {
+                        // Si le metier sélectionné est idmetier=2, ajuster le salaire
+                        double salaireMetier1 = dataService.getSalaireByIdMetier(connection, 1);
+                        // Insérer dans la base de données avec le salaire final
+                        salaireFinal = salaireMetier1 * 2;
+                        dataService.insertMetier(connection, metier, String.valueOf(salaireFinal));
+                        // Fermer la connexion
+                        connection.close();
+                        // Rediriger vers une page de confirmation ou une autre page appropriée
+                        response.sendRedirect("confirmation.jsp");
+                        break;
+                    }
+            // Insérer dans la base de données avec le salaire final
+                case "3":
+                    {
+                        double salaireMetier1 = dataService.getSalaireByIdMetier(connection, 1);
+                        salaireFinal=salaireMetier1*3;
+                        // Insérer dans la base de données avec le salaire final
+                        dataService.insertMetier(connection, metier, String.valueOf(salaireFinal));
+                        // Fermer la connexion
+                        connection.close();
+                        // Rediriger vers une page de confirmation ou une autre page appropriée
+                        response.sendRedirect("confirmation.jsp");
+                        break;
+                    }
+                default:
+                    throw new Exception ("Une erreur s'est produite");
+            }
 
-        // Insérer dans la base de données avec le salaire final
         
         } catch (Exception e) {
             e.printStackTrace();

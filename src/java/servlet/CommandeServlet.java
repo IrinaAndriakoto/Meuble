@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import model.Categorie;
+import model.Client;
 import model.Materiel;
 import model.Style;
 import model.Taille;
@@ -50,6 +51,8 @@ public class CommandeServlet extends HttpServlet{
                     List<Materiel> mat = dataService.getAllMateriel();
                     request.setAttribute("mat",mat);
             
+                    List<Client> cl = dataService.getAllClients();
+                    request.setAttribute("cl",cl);
             request.getRequestDispatcher("WEB-INF/commande.jsp").forward(request, response);
             }
             catch(Exception e){
@@ -77,13 +80,14 @@ public class CommandeServlet extends HttpServlet{
         String style = request.getParameter("style");
         String taille = request.getParameter("taille");
         String quantite = request.getParameter("qte");
+        String cl = request.getParameter("client");
             try{
                 Service serv = new Service();
                 connection = serv.getConnection();
                 request.setAttribute("connection",connection);
                 
                 try{
-                    serv.insertCommande(connection, quantite, categ, style, taille); 
+                    serv.insertCommande(connection, quantite, categ, style, taille,cl); 
                                         connection.close();
 
                     // Rediriger vers une page de confirmation ou une autre page appropriée

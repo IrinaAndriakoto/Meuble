@@ -406,33 +406,35 @@ public class Service {
         return prix;
     }
     
-        public void insertCommande(Connection con,String nb,String idcat,String idstyle,String idtaille) throws Exception {
+//    public void test(Connection con,String nb,String idcat,String idstyle,String)
+    
+        public void insertCommande(Connection con,String nb,String idcat,String idstyle,String idtaille,String idclient) throws Exception {
         PreparedStatement pst = null;
-            String sql = "insert into commande(nbCommande,idCategorie , idStyle , idTaille) values(?,?,?,?) ";
+            String sql = "insert into commande(nbCommande,idCategorie , idStyle , idTaille,idclient) values(?,?,?,?,?) ";
             try{
                 
                             // Vérifier la disponibilité des matériaux dans le stock
-            if (!checkMaterialsAvailability(con, idstyle,nb)) {
-                throw new InsufficientMaterialsException("Il n'y a pas assez de matériaux disponibles.");
-            }
+//            if (!checkMaterialsAvailability(con, idstyle,nb)) {
+//                throw new InsufficientMaterialsException("Il n'y a pas assez de matériaux disponibles.");
+//            }
             
                 pst = con.prepareStatement(sql);
                 pst.setInt(1,parseInt(nb));
                 pst.setInt(2,parseInt(idcat));
                 pst.setInt(3,parseInt(idstyle));
                 pst.setInt(4,parseInt(idtaille));
-                
+                pst.setInt(5,parseInt(idclient));
                 pst.executeUpdate();
                 
-                ResultSet generatedKeys = pst.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int orderId = generatedKeys.getInt(1);
-
-                    // Étapes 2, 3 et 4 : Récupérez les informations et mettez à jour le stock
-                    updateStockAfterCommande(con, orderId);
-                } else {
-                    throw new SQLException("Échec de récupération de l'ID de commande généré.");
-                }
+//                ResultSet generatedKeys = pst.getGeneratedKeys();
+//                if (generatedKeys.next()) {
+//                    int orderId = generatedKeys.getInt(1);
+//
+//                    // Étapes 2, 3 et 4 : Récupérez les informations et mettez à jour le stock
+//                    updateStockAfterCommande(con, orderId);
+//                } else {
+//                    throw new SQLException("Échec de récupération de l'ID de commande généré.");
+//                }
             }
          catch (SQLException e) {
             throw e;
@@ -721,5 +723,58 @@ public class Service {
         }
 
         return list;
+    }
+    
+        public void insertClient(Connection c, String cl,String g) throws Exception {
+            PreparedStatement pst = null;
+            String sql = "INSERT INTO client (nom,genre) values (?,?)";
+            try {
+                 pst = c.prepareStatement(sql);
+                pst.setString(1, cl);
+                pst.setString(2,g);
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+             finally {
+                if (pst != null) {
+                    pst.close();
+            }
+        }
+        }
+    
+    public List<Client> getAllClients() throws Exception{
+        String sql="Select * from client";
+        Connection con=null;
+        List<Client> clients = new ArrayList<>();
+        try{
+            con = getConnection();
+            
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    Client pers = new Client();
+                    
+//                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
+                    pers.setIdClient(resultSet.getInt("idclient"));
+                    pers.setNomClient(resultSet.getString("nom"));
+//                    pers.setDateDeNaissance(resultSet.getDate("datedenaissance"));
+                    pers.setGenre(resultSet.getString("genre"));
+// Ajoutez d'autres propriétés en fonction de votre modèle de données
+                    clients.add(pers);
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }finally{
+            closeConnection(con);
+        }
+        return clients;
     }
 }

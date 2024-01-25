@@ -25,6 +25,7 @@
     categorie= (List<Categorie>) request.getAttribute("get_categories");
     
     List<Materiel> mat = (List<Materiel>) request.getAttribute("mat");
+    List<Client> cl = (List<Client>) request.getAttribute("cl");
     %>
     <body>
         <h1>Commander un meuble</h1>
@@ -44,6 +45,11 @@
                 <option value="<%= taille.get(i).getIdTaille() %>" > <%= taille.get(i).getTaille() %> </option>
                 <% } %>
             </select>
+            <select name="client">
+                <% for(int i=0;i<cl.size();i++) { %>
+                <option value="<%= cl.get(i).getIdClient() %>" > <%= cl.get(i).getNomClient() %> </option>
+                <% } %>
+            </select>            
             Nombre de commande :<input type="text" name="qte"> 
             <input type="submit" value="Valider">
         </form>
