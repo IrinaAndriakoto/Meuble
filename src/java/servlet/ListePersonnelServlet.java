@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import model.Materiel;
-import model.V_getListePersonnel;
+import model.V_salairepersonnel;
 
 /**
  *
@@ -30,7 +30,7 @@ public class ListePersonnelServlet extends HttpServlet {
         try{
                  Service dataService = new Service();
         request.setAttribute("connection",dataService.getConnection());
-                 List<V_getListePersonnel> list = dataService.getAllPersonnel();
+                 List<V_salairepersonnel> list = dataService.getAllPersonnel();
                  request.setAttribute("liste", list);
         
         // Redirigez vers la page JSP d'affichage

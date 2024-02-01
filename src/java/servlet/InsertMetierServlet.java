@@ -33,10 +33,10 @@ public class InsertMetierServlet extends HttpServlet {
                 Service dataService = new Service();
                  connection = dataService.getConnection();
         request.setAttribute("connection",connection);
-                 List<Metier> list = dataService.getAllMetier();
-
-                 request.setAttribute("list", list);
-        
+//                 List<Metier> list = dataService.getAllMetier();
+//
+//                 request.setAttribute("list", list);
+//        
         // Redirigez vers la page JSP d'affichage
         request.getRequestDispatcher("/WEB-INF/insertMetier.jsp").forward(request, response);
         }catch(Exception e){
@@ -56,8 +56,8 @@ public class InsertMetierServlet extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String metier = request.getParameter("metier");
-        String salaire = request.getParameter("sal");
-
+//        String salaire = request.getParameter("sal");
+        String coeff=request.getParameter("coeff");
         Connection connection = null;
         
         try {
@@ -67,42 +67,20 @@ public class InsertMetierServlet extends HttpServlet {
                  connection = dataService.getConnection();
             request.setAttribute("connection",connection);
         // Récupérer le salaire associé à l'idMetier
-        double salaireFinal = Double.parseDouble(salaire);
+//        int salaireFinal = Integer.parseInt(salaire);
 
-        if (null == metier) {
-            throw new Exception ("Une erreur s'est produite");
-        } else switch (metier) {
-                case "2":
-                    {
                         // Si le metier sélectionné est idmetier=2, ajuster le salaire
-                        double salaireMetier1 = dataService.getSalaireByIdMetier(connection, 1);
+//                        double salaireMetier1 = dataService.getSalaireByIdMetier(connection, 1);
                         // Insérer dans la base de données avec le salaire final
-                        salaireFinal = salaireMetier1 * 2;
-                        dataService.insertMetier(connection, metier, String.valueOf(salaireFinal));
+                        int coeffic=Integer.parseInt(coeff);
+//                        salaireFinal = salaireFinal * coeffic;
+                        dataService.insertMetier(connection, metier,coeffic);
                         // Fermer la connexion
                         connection.close();
                         // Rediriger vers une page de confirmation ou une autre page appropriée
                         response.sendRedirect("confirmation.jsp");
-                        break;
-                    }
-            // Insérer dans la base de données avec le salaire final
-                case "3":
-                    {
-                        double salaireMetier1 = dataService.getSalaireByIdMetier(connection, 1);
-                        salaireFinal=salaireMetier1*3;
-                        // Insérer dans la base de données avec le salaire final
-                        dataService.insertMetier(connection, metier, String.valueOf(salaireFinal));
-                        // Fermer la connexion
-                        connection.close();
-                        // Rediriger vers une page de confirmation ou une autre page appropriée
-                        response.sendRedirect("confirmation.jsp");
-                        break;
-                    }
-                default:
-                    throw new Exception ("Une erreur s'est produite");
-            }
-
-        
+                       
+                    
         } catch (Exception e) {
             e.printStackTrace();
             // Rediriger vers une page d'erreur avec le message d'erreur approprié

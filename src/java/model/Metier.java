@@ -11,7 +11,7 @@ package model;
 public class Metier {
     private int idMetier;
     private String metier;
-    private int salaireParHeure;
+    private int coeff;
 
     public int getIdMetier() {
         return idMetier;
@@ -29,12 +29,12 @@ public class Metier {
         this.metier = metier;
     }
 
-    public int getSalaireParHeure() {
-        return salaireParHeure;
+    public int getCoeff() {
+        return coeff;
     }
 
-    public void setSalaireParHeure(int salaireParHeure) {
-        this.salaireParHeure = salaireParHeure;
+    public void setCoeff(int coeff) {
+        this.coeff = coeff;
     }
     
     

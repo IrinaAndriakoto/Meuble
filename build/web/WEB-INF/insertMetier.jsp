@@ -14,7 +14,7 @@
         <title></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
     </head>
     <% 
         
@@ -25,17 +25,15 @@
     <center>
         <div id="all">
         <form method="post" action="insertMetier">
-            <h1>Insertion de Metier</h1>
+            <h3>Insertion de Metier</h3>
 <p>Metier:
-    <select id="metierSelect" name="metier" onchange="afficherMasquerSalaire()">
-        <% for(int i=0; i<met.size(); i++) { %>
-        <option value="<%= met.get(i).getIdMetier() %>"> <%= met.get(i).getMetier() %> </option>
-        <% } %>
-    </select>
+
+    <input type="text" name="metier">
 </p>
 
 <div id="salaireSection">
-    <p>Salaire: <input type="text" name="sal"></p>
+    <!--<p>Salaire: <input type="text" name="sal"></p>-->
+    <p>Coefficient : <input type="text" name="coeff"></p>
 </div>
             <input type="submit" value="Inserer">
         </form>

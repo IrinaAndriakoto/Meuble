@@ -11,29 +11,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/inc/Service.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/commande.jsp</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/InsertStockServlet.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/model/V_getListePersonnel.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/CommandeServlet.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/listeMateriaux.jsp</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/InsertMetierServlet.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/InsertClientServlet.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/model/Materiel.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/insertPersonnel.jsp</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/ListePersonnel.jsp</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/ListePersonnelServlet.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/StatServlet.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/insertStyle.jsp</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/stat.jsp</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/assets/css/style.css</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/insertMetier.jsp</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/index.html</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/model/Client.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/insertClient.jsp</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/src/java/servlet/InsertionPersonnel.java</file>
-            <file>file:/C:/Users/Irina/Documents/NetBeansProjects/MeubleProjet/Meuble/web/WEB-INF/listeStyle.jsp</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

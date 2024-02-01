@@ -216,6 +216,30 @@ public class Service {
         }
     }
     
+    public void insertHistoriqueStock(Connection co,String idm,String qte,Date date) throws Exception{
+        
+        PreparedStatement pst = null;
+        co=getConnection();
+        String sql="insert into historiquestock(idmateriel,quantite,date) values(?,?,?)";
+        try{
+            pst=co.prepareStatement(sql);
+            pst.setInt(1,parseInt(idm));
+            pst.setInt(2,parseInt(qte));
+            pst.setDate(3, date);
+            
+            pst.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            throw e;
+        }
+                     finally {
+                if (pst != null) {
+                    pst.close();
+            }
+        
+    }
+    }
     public void insertQuantiteMateriel(Connection co,String idCategorie,String idMatr ,String idTaille , String idStyle , String qte) throws Exception{
         try{
             String sql="insert into quantitemateriel(quantite,idtaille,idcategorie,idmateriel,idstyle) values(?,?,?,?,?) ";
@@ -555,9 +579,41 @@ public class Service {
     }
         
         
-    public void insertPersonnel(Connection c,String nom,Date dtn,Date demb) throws Exception {
+    public List<Poste> getAllPost() throws Exception{
+        List<Poste> post = new ArrayList<>();
+        Connection con = null;
+        try{
+            con = getConnection();
+            String sql = "SELECT * FROM poste";
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    Poste p = new Poste();
+                    
+//                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
+                    p.setIdPoste(resultSet.getInt("idPoste"));
+                    p.setPoste(resultSet.getString("poste"));
+                    p.setSalaireparheure(resultSet.getInt("salaireparheure"));
+                // Ajoutez d'autres propriétés en fonction de votre modèle de données
+                    post.add(p);
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }finally{
+            closeConnection(con);
+        }
+
+        return post;
+    }
+    public void insertPersonnel(Connection c,String nom,Date dtn,Date demb,String idp) throws Exception {
         PreparedStatement pst = null;
-        String sql="insert into personnel(nompersonnel,datedenaissance,dateembauche,idmetier) values(?,?,?,1)";
+        String sql="insert into personnel(nompersonnel,datedenaissance,dateembauche,idmetier,idposte) values(?,?,?,1,?)";
         
         try{
             pst=c.prepareStatement(sql);
@@ -565,7 +621,7 @@ public class Service {
             pst.setString(1,nom);
             pst.setDate(2, dtn);
             pst.setDate(3,demb);
-            
+            pst.setInt(4,parseInt(idp));
             pst.executeUpdate();
         }
         catch(SQLException e){
@@ -574,16 +630,16 @@ public class Service {
         }
     }
     
-    public void insertMetier(Connection c,String metier,String sph) throws Exception {
+    public void insertMetier(Connection c,String metier,int coeff) throws Exception {
         PreparedStatement pst = null;
-        String sql="insert into metier(metier,salaireparheure) values(?,?)";
+        String sql="insert into metier(metier,coeff) values(?,?)";
         
         try{
             pst=c.prepareStatement(sql);
             
             pst.setString(1,metier);
-            pst.setInt(2, Integer.parseInt(sph));
-            
+//            pst.setInt(2, /sph);
+            pst.setInt(2,coeff);
             pst.executeUpdate();
         }
         catch(SQLException e){
@@ -592,6 +648,23 @@ public class Service {
         }
     }
     
+        public void insertPoste(Connection c,String poste,int sal) throws Exception {
+        PreparedStatement pst = null;
+        String sql="insert into metier(poste,salaireparheure) values(?,?)";
+        
+        try{
+            pst=c.prepareStatement(sql);
+            
+            pst.setString(1,poste);
+//            pst.setInt(2, /sph);
+            pst.setInt(2,sal);
+            pst.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
     public double getSalaireByIdMetier(Connection con,int idmet) {
         PreparedStatement ps = null;
         double salaire=0.0;
@@ -688,25 +761,28 @@ public class Service {
                 pst.close();
             }
         }
-        
+   
         }
         
-    public List<V_getListePersonnel> getAllPersonnel() throws Exception{
-              List<V_getListePersonnel> list = new ArrayList<>();
+    public List<V_salairepersonnel> getAllPersonnel() throws Exception{
+              List<V_salairepersonnel> list = new ArrayList<>();
         Connection con = null;
         try{
             con = getConnection();
-            String sql = "SELECT * FROM v_getlistepersonnel";
+            String sql = "SELECT * FROM v_salairepersonnel";
             try (PreparedStatement statement = con.prepareStatement(sql);
                  ResultSet resultSet = statement.executeQuery()) {
 
                 while (resultSet.next()) {
-                    V_getListePersonnel pers = new V_getListePersonnel();
+                    V_salairepersonnel pers = new V_salairepersonnel();
                     
 //                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
                     pers.setIdPersonnel(resultSet.getInt("idpersonnel"));
                     pers.setNomPersonnel(resultSet.getString("nompersonnel"));
+                    pers.setDatedenaissance(resultSet.getDate("datedenaissance"));
+                    pers.setDateembauche(resultSet.getDate("dateembauche"));
                     pers.setMetier(resultSet.getString("metier"));
+                    pers.setPoste(resultSet.getString("poste"));
                     pers.setSalaireHeure(resultSet.getDouble("salaireparheure"));
 // Ajoutez d'autres propriétés en fonction de votre modèle de données
                     list.add(pers);
@@ -777,4 +853,51 @@ public class Service {
         }
         return clients;
     }
+    
+    
+    public List<Client> getStatistiques(Connection con,String produit, String genre) throws Exception {
+    List<Client> statistiques = new ArrayList<>();
+
+    // Utilisez une requête SQL pour récupérer les statistiques depuis la base de données
+    String sqlQuery = "SELECT c.idClient, c.nom, c.dateDeNaissance, c.genre , Count(*) " +
+                      "FROM client c " +
+                      "JOIN commande cmd ON c.idClient = cmd.idClient " +
+                      "WHERE cmd.produit = ? AND c.genre = ?";
+    PreparedStatement pst =null;
+    
+    try  {
+            con = getConnection();
+
+        pst = con.prepareStatement(sqlQuery);
+        pst.setString(1, produit);
+        pst.setString(2, genre);
+
+        try (ResultSet rs = pst.executeQuery()) {
+            while (rs.next()) {
+                Client client = new Client();
+                client.setIdClient(rs.getInt("idClient"));
+                client.setNomClient(rs.getString("nom"));
+//                client.setDateDeNaissance(rs.getDate("dateDeNaissance"));
+                client.setGenre(rs.getString("genre"));
+
+                statistiques.add(client);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // Gérez l'exception selon vos besoins
+    }
+
+    return statistiques;
+}
+    
+//    public void insertCoeff(Connection c,String coeff,String idmetier) throws Exception{
+//        PreparedStatement pst = null;
+//        c=getConnection();
+//        String sql="insert into metier(coeff) values(?) where idmetier";
+//        
+//        try{
+//            pst=c.prepareStatement(sql);
+//            pst.setInt(1,parseInt(coeff))
+//        }
+//    }
 }

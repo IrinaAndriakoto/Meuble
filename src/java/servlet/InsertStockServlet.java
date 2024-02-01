@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import model.*;
 
@@ -55,7 +56,11 @@ public class InsertStockServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String materiel= request.getParameter("materiel");
         String qte = request.getParameter("qtestock");
+        String date = request.getParameter("dat");
         Connection connection = null;
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date dateUtil = null;
         
         try {
             
@@ -63,8 +68,12 @@ public class InsertStockServlet extends HttpServlet {
                  connection = dataService.getConnection();
             request.setAttribute("connection",connection);
 
-            dataService.insertStock(connection, qte, materiel);  //fonction miinserer mbola vao ho foronina
+            dateUtil = dateFormat.parse(date);
+            
+            dataService.insertStock(connection, qte, materiel);  
 
+            java.sql.Date dateSql = new java.sql.Date(dateUtil.getTime());
+            dataService.insertHistoriqueStock(connection,materiel,qte,dateSql);
             connection.close();
 
             response.sendRedirect("confirmation.jsp");

@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.util.List;
+import model.Poste;
 
 /**
  *
@@ -27,8 +29,29 @@ public class InsertionPersonnel extends HttpServlet {
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+        Connection connection = null;
+        
+        try{
+            Service d = new Service();
+        connection = d.getConnection();
+        request.setAttribute("connection",connection);
+            List<Poste> p = d.getAllPost();
+            request.setAttribute("poste", p);
             request.getRequestDispatcher("WEB-INF/insertPersonnel.jsp").forward(request, response);
+        
+        }catch(Exception e){
+            e.printStackTrace();
         }
+                 finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,7 +59,7 @@ public class InsertionPersonnel extends HttpServlet {
         // Récupérer la valeur du champ date
         String dateString = request.getParameter("dtn");
         String dateemb = request.getParameter("embauche");
-
+        String p = request.getParameter("post");
         // Convertir la chaîne en objet Date
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date dateUtil = null;
@@ -60,7 +83,7 @@ public class InsertionPersonnel extends HttpServlet {
             if (age < 18) {
                 throw new IllegalArgumentException("Trop jeune pour travailler ici , il faut avoir minimum 18 ans");
             } else {
-                dataService.insertPersonnel(connection, nom,dateSql,dat);
+                dataService.insertPersonnel(connection, nom,dateSql,dat,p);
             }
 
             // Fermer la connexion

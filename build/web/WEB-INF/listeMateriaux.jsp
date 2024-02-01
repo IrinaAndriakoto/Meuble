@@ -12,10 +12,10 @@
     <title>Liste des materiels</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
 </head>
 <body>
-    <h2>Tous les matériaux disponibles</h2>
+    <h3>Tous les matériaux disponibles</h3>
 
         <% 
            List<Materiel> mat = null;
