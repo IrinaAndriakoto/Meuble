@@ -14,6 +14,7 @@
         <form method="post" action="insertMateriel">
             <h3>Ins&eacute;rez les mati&egrave;res pour votre meuble </h3>
             <p> Materiel <input type="text" name="materiel" class="inp"> </p>
+            <p>Prix en Litre/Kilo/Mètre <input type="text" name="pu" class="inp"></p>
             <input type="submit" value="Inserer">
             </div>
         </form>

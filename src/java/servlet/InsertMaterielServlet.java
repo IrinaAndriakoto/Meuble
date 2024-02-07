@@ -42,7 +42,7 @@ public class InsertMaterielServlet extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String MatrValue = request.getParameter("materiel");
-
+        String p = request.getParameter("pu");
         Connection connection = null;
         
         try {
@@ -52,7 +52,7 @@ public class InsertMaterielServlet extends HttpServlet {
                  connection = dataService.getConnection();
             request.setAttribute("connection",connection);
 
-            dataService.insertMateriel(connection, MatrValue);
+            dataService.insertMateriel(connection, MatrValue,p);
 
             // Fermer la connexion
             connection.close();

@@ -33,9 +33,9 @@ public class InsertMetierServlet extends HttpServlet {
                 Service dataService = new Service();
                  connection = dataService.getConnection();
         request.setAttribute("connection",connection);
-//                 List<Metier> list = dataService.getAllMetier();
+                 List<Metier> list = dataService.getAllMetier();
 //
-//                 request.setAttribute("list", list);
+                 request.setAttribute("list", list);
 //        
         // Redirigez vers la page JSP d'affichage
         request.getRequestDispatcher("/WEB-INF/insertMetier.jsp").forward(request, response);

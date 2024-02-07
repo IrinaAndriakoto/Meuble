@@ -39,7 +39,7 @@ public class MaterielStyleServlet extends HttpServlet {
             request.setAttribute("materiauxList", materiauxList);
 
             // Redirigez vers la page JSP pour afficher les résultats
-            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/materiauxPage.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/materiauxPage.jsp");
             dispatcher.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();

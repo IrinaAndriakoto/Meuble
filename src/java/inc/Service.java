@@ -61,13 +61,14 @@ public class Service {
         }
         }
 
-        public void insertMateriel(Connection c, String m) throws Exception {
+        public void insertMateriel(Connection c, String m,String pu) throws Exception {
             PreparedStatement pst = null;
-            String sql = "INSERT INTO Materiaux (materiel) values (?)";
+            String sql = "INSERT INTO Materiaux (materiel,pu) values (?,?)";
             try {
                  pst = c.prepareStatement(sql);
                
                 pst.setString(1, m);
+                pst.setInt(2,parseInt(pu));
 //                pst.setInt(2,parseInt(idStyle));
                 pst.executeUpdate();
             } catch (SQLException e) {
@@ -198,7 +199,7 @@ public class Service {
     
     public void insertStock(Connection c, String qte,String idmat) throws Exception {
             PreparedStatement pst = null;
-            String sql = "INSERT INTO stock (quantitestock,idmateriel) values (?,?)";
+            String sql = "INSERT INTO stock (quantitestock,idmateriel) values (?,?)  on conflict (idmateriel) do update set quantitestock=stock.quantitestock + EXCLUDED.quantitestock;";
             try {
                  pst = c.prepareStatement(sql);
                
@@ -216,7 +217,7 @@ public class Service {
         }
     }
     
-    public void insertHistoriqueStock(Connection co,String idm,String qte,Date date) throws Exception{
+    public void insertHistoriqueStock(Connection co,String idm,String qte,Date date,boolean entree,boolean sortie) throws Exception{
         
         PreparedStatement pst = null;
         co=getConnection();
@@ -226,7 +227,8 @@ public class Service {
             pst.setInt(1,parseInt(idm));
             pst.setInt(2,parseInt(qte));
             pst.setDate(3, date);
-            
+            pst.setBoolean(4,entree);
+            pst.setBoolean(5,sortie);
             pst.executeUpdate();
         }
         catch(SQLException e){
@@ -456,7 +458,7 @@ public class Service {
 //                    int orderId = generatedKeys.getInt(1);
 //
 //                    // Étapes 2, 3 et 4 : Récupérez les informations et mettez à jour le stock
-//                    updateStockAfterCommande(con, orderId);
+//                    ockAfterCommande(con, orderId);
 //                } else {
 //                    throw new SQLException("Échec de récupération de l'ID de commande généré.");
 //                }
@@ -649,16 +651,16 @@ public class Service {
         }
     }
     
-        public void insertPoste(Connection c,String poste,int sal) throws Exception {
+        public void insertPoste(Connection c,String poste,String sal) throws Exception {
         PreparedStatement pst = null;
-        String sql="insert into metier(poste,salaireparheure) values(?,?)";
+        String sql="insert into poste(poste,salaireparheure) values(?,?)";
         
         try{
             pst=c.prepareStatement(sql);
             
             pst.setString(1,poste);
 //            pst.setInt(2, /sph);
-            pst.setInt(2,sal);
+            pst.setInt(2,parseInt(sal));
             pst.executeUpdate();
         }
         catch(SQLException e){
@@ -770,7 +772,7 @@ public class Service {
         Connection con = null;
         try{
             con = getConnection();
-            String sql = "SELECT * FROM v_salairepersonnel";
+            String sql = "SELECT * FROM v_getsalairepersonnel";
             try (PreparedStatement statement = con.prepareStatement(sql);
                  ResultSet resultSet = statement.executeQuery()) {
 
@@ -781,7 +783,7 @@ public class Service {
                     pers.setIdPersonnel(resultSet.getInt("idpersonnel"));
                     pers.setNomPersonnel(resultSet.getString("nompersonnel"));
                     pers.setDatedenaissance(resultSet.getDate("datedenaissance"));
-                    pers.setDateembauche(resultSet.getDate("dateembauche"));
+//                    pers.setDateembauche(resultSet.getDate("dateembauche"));
                     pers.setMetier(resultSet.getString("metier"));
                     pers.setPoste(resultSet.getString("poste"));
                     pers.setSalaireHeure(resultSet.getDouble("salaireparheure"));

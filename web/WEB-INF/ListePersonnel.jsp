@@ -25,8 +25,9 @@
             <tr>
                 <th>ID</th>
                 <th>Nom</th>
+                <th>Metier</th>
                 <th>Poste</th>
-                <th>Salaire</th>
+                <th>Salaire par heure</th>
             </tr>
             <% for(int i=0;i<list.size();i++) { %>
             <tr>

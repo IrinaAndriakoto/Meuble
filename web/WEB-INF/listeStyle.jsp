@@ -1,4 +1,4 @@
-r<%-- 
+<%-- 
     Document   : affichage
     Created on : 12 nov. 2023, 11:42:58
     Author     : Irina
@@ -34,7 +34,7 @@ r<%--
     <% } %>
     </ul>
 <% } else { %>
-    <p> Aucun produit disponible. </p>
+    <p> Aucun materiel disponible. </p>
 <% } %>
 
 <br> 
@@ -65,27 +65,3 @@ r<%--
 
 </body>
 </html>
-<!--<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var styleLinks = document.querySelectorAll('.style-link');
-
-        styleLinks.forEach(function(link) {
-            link.addEventListener('click', function() {
-                var styleId = this.getAttribute('data-style-id');
-                loadMateriaux(styleId);
-            });
-        });
-
-        function loadMateriaux(styleId) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.getElementById('materiaux-container').innerHTML = xhr.responseText;
-                }
-            };
-
-            xhr.open('GET', 'MateriauxServlet?idStyle=' + styleId, true);
-            xhr.send();
-        }
-    });
-</script>-->

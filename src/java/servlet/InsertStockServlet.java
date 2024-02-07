@@ -73,7 +73,7 @@ public class InsertStockServlet extends HttpServlet {
             dataService.insertStock(connection, qte, materiel);  
 
             java.sql.Date dateSql = new java.sql.Date(dateUtil.getTime());
-            dataService.insertHistoriqueStock(connection,materiel,qte,dateSql);
+            dataService.insertHistoriqueStock(connection,materiel,qte,dateSql,true,false);
             connection.close();
 
             response.sendRedirect("confirmation.jsp");
