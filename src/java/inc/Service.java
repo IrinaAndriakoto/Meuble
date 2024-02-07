@@ -220,7 +220,7 @@ public class Service {
         
         PreparedStatement pst = null;
         co=getConnection();
-        String sql="insert into historiquestock(idmateriel,quantite,date) values(?,?,?)";
+        String sql="insert into historiquestock(idmateriel,quantite,date,entree,sortie) values(?,?,?,?,?)";
         try{
             pst=co.prepareStatement(sql);
             pst.setInt(1,parseInt(idm));
@@ -240,16 +240,17 @@ public class Service {
         
     }
     }
-    public void insertQuantiteMateriel(Connection co,String idCategorie,String idMatr ,String idTaille , String idStyle , String qte) throws Exception{
+    public void insertQuantiteMateriel(Connection co,String idCategorie,String idMatr ,String idTaille , String idStyle , String qte,String duree,String nb) throws Exception{
         try{
-            String sql="insert into quantitemateriel(quantite,idtaille,idcategorie,idmateriel,idstyle) values(?,?,?,?,?) ";
+            String sql="insert into quantitemateriel(quantite,idtaille,idcategorie,idmateriel,idstyle,dureefabrication,nbemploye) values(?,?,?,?,?,?,?) ";
             PreparedStatement pst = co.prepareStatement(sql);
             pst.setInt(1,parseInt(qte));
             pst.setInt(2,parseInt(idTaille));
             pst.setInt(3,parseInt(idCategorie));
             pst.setInt(4,parseInt(idMatr));
             pst.setInt(5,parseInt(idStyle));
-            
+            pst.setInt(6, parseInt(duree));
+            pst.setInt(7,parseInt(nb));
             pst.executeUpdate();
         }catch(SQLException e){
             throw e;

@@ -53,6 +53,8 @@
             </select> </p>
             
             <input type="text" name="quantite" placeholder="Quantite du materiel" class="qte">
+            <input type="text" name="duree" placeholder="La durée de fabrication"> Heures
+            <input type="text" name="nbEmp" placeholder="Nombre d'employés requis">
             <br/>
             <input type="submit" value="Inserer">
         </form>

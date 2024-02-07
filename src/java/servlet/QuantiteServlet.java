@@ -68,11 +68,13 @@ public class QuantiteServlet extends HttpServlet {
         String style = request.getParameter("style");
         String taille = request.getParameter("taille");
         String quantite = request.getParameter("quantite");
+        String d = request.getParameter("duree");
+        String nb = request.getParameter("nbEmp");
             try{
                 Service serv = new Service();
                 connection = serv.getConnection();
                 request.setAttribute("connection",connection);
-                serv.insertQuantiteMateriel(connection, categ, matr, taille, style, quantite);
+                serv.insertQuantiteMateriel(connection, categ, matr, taille, style, quantite,d,nb);
             
                             // Fermer la connexion
                     connection.close();
