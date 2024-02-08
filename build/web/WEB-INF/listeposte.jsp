@@ -27,12 +27,12 @@
                     <th>Poste</th>
                     <th>Salaire par heure</th>
                 </tr>
+                <% for(int i=0;i<p.size();i++) { %>
                 <tr>
-                    <% for(int i=0;i<p.size();i++) { %>
                     <td><%= p.get(i).getPoste() %> </td>
                     <td><%= p.get(i).getSalaireparheure() %> </td>
-                    <% } %>
                 </tr>
+                <% } %>
             </table>
     </body>
 </html>

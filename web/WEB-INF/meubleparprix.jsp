@@ -22,15 +22,21 @@
         List<V_getPrixMateriel> list = (List<V_getPrixMateriel>) request.getAttribute("resultats");
     %>
     <body>
-        <% for(int i=0;i<list.size();i++) { %>
-        <ul>
-            <li>
-                <strong>Categorie :<%= list.get(i).getNomCategorie()  %> </strong> <br>
-                <strong>Style : <%=list.get(i).getNomStyle() %></strong> <br>
-                <strong>Taille : <%= list.get(i).getTaille() %></strong> <br>
-              <strong>Prix : <%= list.get(i).getPrix() %> Ariary </strong>
-            </li>
-        </ul>
-        <% } %>
+        <table>
+            <tr>
+                <th>Categorie</th>
+                <th>Style</th><!-- comment -->
+                <th>Taille</th>
+                <th>Prix</th>
+            </tr>
+            <% for(int i=0;i<list.size();i++) { %>
+            <tr>
+                <td><%= list.get(i).getNomCategorie()  %></td>
+                <td><%=list.get(i).getNomStyle() %></td>
+                <td><%= list.get(i).getTaille() %></td>
+                <td><%= list.get(i).getPrix() %> Ariary</td>
+            </tr>
+            <% } %>
+        </table>
     </body>
 </html>

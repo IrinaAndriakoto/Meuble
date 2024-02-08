@@ -916,4 +916,51 @@ public class Service {
 //            pst.setInt(1,parseInt(coeff))
 //        }
 //    }
+    
+    public List<V_benefice> getAllBenef() throws Exception{
+        PreparedStatement pst = null;
+        Connection con =null;
+        String sql="select * from v_benefice";
+        List<V_benefice> benef = new ArrayList<>();
+           try{
+               con = getConnection();
+           
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    V_benefice b = new V_benefice();
+                    
+//                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
+                    b.setIdcategorie(resultSet.getInt("idcategorie"));
+                    b.setCategorie(resultSet.getString("categorie"));
+//                    pers.setDateDeNaissance(resultSet.getDate("datedenaissance"));
+                    b.setStyle(resultSet.getString("style"));
+                    b.setTaille(resultSet.getString("taille"));
+                    b.setMainsDoeuvres(resultSet.getInt("mainsdoeuvre"));
+                    b.setValeurFabrication(resultSet.getInt("valeurdefabrication"));
+                    b.setPrixDeVente(resultSet.getInt("prixvente"));
+                    b.setPrixDeRevient(resultSet.getInt("prixrevient"));
+                    b.setBenefice(resultSet.getInt("benefice"));
+// Ajoutez d'autres propriétés en fonction de votre modèle de données
+                    benef.add(b);
+                }
+                
+            }
+                catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }finally{
+            closeConnection(con);
+        }
+
+        
+         return benef;
+
+    }
+    
 }
+
