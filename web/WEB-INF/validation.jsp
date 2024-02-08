@@ -22,9 +22,10 @@
     <title>JSP Page</title>
 </head>
 <body>
-    <h3>Liste Commande</h3>
+    <h3>Les commandes en attente de validation :</h3>
     
-    
+            <form method="post" action="validation">
+
     <table border="1" width="200px">
         <tr>
             <th>Id Commande</th>
@@ -34,19 +35,27 @@
             <th>Style</th>
         </tr>
 
-        <% for(V_getCommande cmd : listeCommande) { %>
-        <tr>
-            <td name="idcommande"><%= cmd.getIdCommande() %></td>
-            <td><%= cmd.getNbCommande() %></td>
-            <td><%= cmd.getCategorie() %></td>
-            <td><%= cmd.getTaille() %></td>
-            <td><%= cmd.getStyle() %></td>
-            <td><input type="submit" value="Valider la commande"></td>
-        </tr>
+            
+            <% for(V_getCommande cmd : listeCommande) { %>
+            <tr>
+                <td><%= cmd.getIdCommande() %></td>
+                <td><%= cmd.getNbCommande() %></td>
+                <td><%= cmd.getCategorie() %></td>
+                <td><%= cmd.getTaille() %></td>
+                <td><%= cmd.getStyle() %></td>
+                <td>
+                    <!-- Champ hidden pour stocker la valeur nb -->
+                    <input type="hidden" name="nb" value="<%= cmd.getNbCommande() %>">
+                    <input type="hidden" name="idcommande" value="<%= cmd.getIdCommande() %>"
+                    <!-- Bouton de soumission de formulaire -->
+                    <input type="submit" value="Valider la commande">
+                </td>
+            </tr>
 
-        <% } %>
+            <% } %>
 
     </table>
-    
+            </form>
+
 </body>
 </html>

@@ -15,7 +15,7 @@
         <link href="assets/css/main.css" rel="stylesheet">
     </head>
     <body>
-        <h1>Insertion reussie.</h1>
+        <h3>Insertion reussie.</h3>
         <a href="index.html">Retourner a la page d'accueil.</a>
     </body>
 </html>

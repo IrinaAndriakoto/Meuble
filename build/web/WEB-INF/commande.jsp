@@ -34,23 +34,24 @@
                 <% for(int i=0;i<categorie.size();i++) { %>
                 <option value="<%= categorie.get(i).getIdCategorie() %>" > <%= categorie.get(i).getCategorie() %> </option>
                 <% } %>
-            </select>
+            </select> <br>
             <select  name="style">
                 <% for(int i=0;i<style.size();i++) { %>
                 <option value="<%= style.get(i).getIdStyle() %>" > <%= style.get(i).getStyle() %> </option>
                 <% } %>
-            </select>
+            </select> <br>
             <select name="taille">
                 <% for(int i=0;i<taille.size();i++) { %>
                 <option value="<%= taille.get(i).getIdTaille() %>" > <%= taille.get(i).getTaille() %> </option>
                 <% } %>
-            </select>
+            </select> <br>
             <select name="client">
                 <% for(int i=0;i<cl.size();i++) { %>
                 <option value="<%= cl.get(i).getIdClient() %>" > <%= cl.get(i).getNomClient() %> </option>
                 <% } %>
-            </select>            
+            </select>      <br>      
             Nombre de commande :<input type="text" name="qte"> 
+            <br>
             <input type="submit" value="Valider">
         </form>
         </body>

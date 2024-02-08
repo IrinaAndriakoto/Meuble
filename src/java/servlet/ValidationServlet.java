@@ -36,7 +36,7 @@ public class ValidationServlet extends HttpServlet{
                     Service dataService = new Service();
                     connection = dataService.getConnection();
         request.setAttribute("connection",connection);
-                    List<V_getCommande> list = dataService.getAllCommande();
+                    List<V_getCommande> list = dataService.getAllCommandeNoValid();
                     
                     request.setAttribute("list",list);
             
@@ -62,11 +62,8 @@ public class ValidationServlet extends HttpServlet{
         throws ServletException, IOException {
         
         Connection connection =null;               
-        String categ = request.getParameter("categorie");
-//        String matr = request.getParameter("materiel");
-        String style = request.getParameter("style");
-        String taille = request.getParameter("taille");
-        String quantite = request.getParameter("qte");
+
+        String nb = request.getParameter("nb");
         
         String idcommande = request.getParameter("idcommande");
         Boolean v = true;
@@ -74,18 +71,25 @@ public class ValidationServlet extends HttpServlet{
                 Service serv = new Service();
                 connection = serv.getConnection();
                 request.setAttribute("connection",connection);
-//                serv.valider(connection, idcommande, v, style, taille);
-            
-                            // Fermer la connexion
+                int nbC = Integer.parseInt(nb);
+                String result = serv.updateStockAndHistorique(connection,nbC);
+
+                if (!result.startsWith("La quantité du matériel est insuffisante.")) {
+                    serv.valider(connection, idcommande, v);
+
                     connection.close();
 
                     // Rediriger vers une page de confirmation ou une autre page appropriée
                     response.sendRedirect("confirmation.jsp");
+                } else {
+                    // Gérer l'erreur
+                    System.out.println(result);
+                }
             }
             catch(Exception e){
             e.printStackTrace();
             // Rediriger vers une page d'erreur avec le message d'erreur approprié
-            request.setAttribute("errorMessage", "Une erreur s'est produite lors de l'insertion du style : " + e.getMessage());
+            request.setAttribute("errorMessage", "Une erreur s'est produite  : " + e.getMessage());
             RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
             rd.forward(request, response);
   

@@ -69,10 +69,11 @@ public class InsertStockServlet extends HttpServlet {
             request.setAttribute("connection",connection);
 
             dateUtil = dateFormat.parse(date);
+            java.sql.Date dateSql = new java.sql.Date(dateUtil.getTime());
             
             dataService.insertStock(connection, qte, materiel);  
 
-            java.sql.Date dateSql = new java.sql.Date(dateUtil.getTime());
+            
             dataService.insertHistoriqueStock(connection,materiel,qte,dateSql,true,false);
             connection.close();
 

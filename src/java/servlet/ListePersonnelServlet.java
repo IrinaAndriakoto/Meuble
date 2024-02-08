@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
 import java.util.List;
 import model.Materiel;
 import model.V_salairepersonnel;
@@ -32,7 +33,15 @@ public class ListePersonnelServlet extends HttpServlet {
         request.setAttribute("connection",dataService.getConnection());
                  List<V_salairepersonnel> list = dataService.getAllPersonnel();
                  request.setAttribute("liste", list);
-        
+                 Connection conn=dataService.getConnection();
+                 
+                 String sql = "UPDATE personnel SET idmetier = CASE WHEN EXTRACT(YEAR FROM AGE(CURRENT_DATE, dateembauche)) >= 5 THEN 3 WHEN EXTRACT(YEAR FROM AGE(CURRENT_DATE, dateembauche)) >= 2 THEN 2 ELSE 1 END";
+
+                    // Créer un objet PreparedStatement
+                    PreparedStatement pstmt = conn.prepareStatement(sql);
+
+                    // Exécuter la requête SQL
+                    pstmt.executeUpdate();
         // Redirigez vers la page JSP d'affichage
         request.getRequestDispatcher("/WEB-INF/ListePersonnel.jsp").forward(request, response);
         }catch(Exception e){

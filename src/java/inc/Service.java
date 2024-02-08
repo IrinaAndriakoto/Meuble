@@ -433,18 +433,12 @@ public class Service {
         return prix;
     }
     
-//    public void test(Connection con,String nb,String idcat,String idstyle,String)
     
         public void insertCommande(Connection con,String nb,String idcat,String idstyle,String idtaille,String idclient) throws Exception {
         PreparedStatement pst = null;
             String sql = "insert into commande(nbCommande,idCategorie , idStyle , idTaille,idclient) values(?,?,?,?,?) ";
             try{
                 
-                            // Vérifier la disponibilité des matériaux dans le stock
-//            if (!checkMaterialsAvailability(con, idstyle,nb)) {
-//                throw new InsufficientMaterialsException("Il n'y a pas assez de matériaux disponibles.");
-//            }
-            
                 pst = con.prepareStatement(sql);
                 pst.setInt(1,parseInt(nb));
                 pst.setInt(2,parseInt(idcat));
@@ -453,15 +447,6 @@ public class Service {
                 pst.setInt(5,parseInt(idclient));
                 pst.executeUpdate();
                 
-//                ResultSet generatedKeys = pst.getGeneratedKeys();
-//                if (generatedKeys.next()) {
-//                    int orderId = generatedKeys.getInt(1);
-//
-//                    // Étapes 2, 3 et 4 : Récupérez les informations et mettez à jour le stock
-//                    ockAfterCommande(con, orderId);
-//                } else {
-//                    throw new SQLException("Échec de récupération de l'ID de commande généré.");
-//                }
             }
          catch (SQLException e) {
             throw e;
@@ -470,61 +455,7 @@ public class Service {
             }
     }
     
-    public void updateStockAfterCommande(Connection connection, int orderId) throws SQLException {
-        // ... code précédent pour récupérer les informations et mettre à jour le stock ...
-        String selectCommandeInfo = "SELECT idstyle, idcategorie, idtaille FROM commande WHERE idcommande = ?";
-        PreparedStatement selectCommandeInfoStmt = connection.prepareStatement(selectCommandeInfo);
-        selectCommandeInfoStmt.setInt(1, orderId);
-        ResultSet commandeInfoResult = selectCommandeInfoStmt.executeQuery();
 
-        if (commandeInfoResult.next()) {
-            int idStyle = commandeInfoResult.getInt("idstyle");
-            int idCategorie = commandeInfoResult.getInt("idcategorie");
-            int idTaille = commandeInfoResult.getInt("idtaille");
-
-            // Étape 3 : Obtenez les quantités nécessaires de chaque matériau à partir de la table quantitemateriel
-            String selectQuantiteMateriel = "SELECT idmateriel, quantite FROM quantitemateriel WHERE idstyle = ? AND idcategorie = ? AND idtaille = ?";
-            PreparedStatement selectQuantiteMaterielStmt = connection.prepareStatement(selectQuantiteMateriel);
-            selectQuantiteMaterielStmt.setInt(1, idStyle);
-            selectQuantiteMaterielStmt.setInt(2, idCategorie);
-            selectQuantiteMaterielStmt.setInt(3, idTaille);
-            ResultSet quantiteMaterielResult = selectQuantiteMaterielStmt.executeQuery();
-
-            // Étape 4 : Soustrayez ces quantités du stock actuel dans la table stock
-            String updateStock = "UPDATE stock SET quantite = quantite - ? WHERE idmateriel = ?";
-            PreparedStatement updateStockStmt = connection.prepareStatement(updateStock);
-
-            while (quantiteMaterielResult.next()) {
-                int idMateriel = quantiteMaterielResult.getInt("idmateriel");
-                int quantite = quantiteMaterielResult.getInt("quantite");
-
-                updateStockStmt.setInt(1, quantite);
-                updateStockStmt.setInt(2, idMateriel);
-                updateStockStmt.executeUpdate();
-    }
-}
-    }
- private boolean checkMaterialsAvailability(Connection connection, String id,String nb) throws SQLException {
-        // Implémentez la logique pour vérifier la disponibilité des matériaux dans le stock
-        // Retournez true si suffisamment de matériaux sont disponibles, sinon false
-
-        // Exemple de requête SQL pour vérifier la disponibilité du matériau pour un style donné :
-    String checkAvailabilityQuery = "SELECT COUNT(*) FROM quantitemateriel qm " +
-                                     "WHERE qm.idstyle = ? AND qm.quantite <= (SELECT quantite FROM stock WHERE idmateriel = qm.idmateriel)";
-        try (PreparedStatement checkAvailabilityStmt = connection.prepareStatement(checkAvailabilityQuery)) {
-            checkAvailabilityStmt.setInt(1,parseInt( id));
-            checkAvailabilityStmt.setInt(2, parseInt(nb));
-            ResultSet resultSet = checkAvailabilityStmt.executeQuery();
-            resultSet.next();
-            int count = resultSet.getInt(1);
-
-            return count > 0;
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-            throw e;
-        }
-    }
         public List<V_getCommande> getAllCommande() throws Exception {
         List<V_getCommande> commandes = new ArrayList<>();
         Connection con = null;
@@ -558,16 +489,98 @@ public class Service {
 
         return commandes;
     }
+        public List<V_getCommande> getAllCommandeNoValid() throws Exception {
+        List<V_getCommande> commandes = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = getConnection();
+            String sql = "SELECT * FROM v_getCommande where isvalid=false";
+            try (PreparedStatement statement = con.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    V_getCommande produit = new V_getCommande();
+                    
+                    produit.setIdCommande(resultSet.getString("idcommande"));
+                    produit.setNbCommande(resultSet.getInt("nbCommande"));
+                    produit.setTaille(resultSet.getString("taille"));
+                    produit.setStyle(resultSet.getString("style"));
+                    produit.setCategorie(resultSet.getString("categorie"));
+                    commandes.add(produit);
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            throw e; // Gérez les exceptions de manière appropriée dans votre application
+        }
+        finally {
+            closeConnection(con); // Close the connection in the finally block
+        }
+
+        return commandes;
+    }
         
-        public void valider(Connection c, String idcomm , boolean isValid , String idQuantite) throws Exception {
+    public String updateStockAndHistorique(Connection conn,int nb) {
+        try  {
+        // Créer une nouvelle requête SQL pour récupérer les données
+        String selectSql = "select * from v_commandequantitemateriel";
+        PreparedStatement selectPstmt = conn.prepareStatement(selectSql);
+        ResultSet rs = selectPstmt.executeQuery();
+
+        while (rs.next()) {
+            int idmateriel = rs.getInt("idmateriel");
+            int quantite = rs.getInt("quantite")*nb;
+
+            // Vérifier si la quantité de stock est suffisante
+            String checkSql = "SELECT quantitestock FROM stock WHERE idmateriel = ?";
+            PreparedStatement checkPstmt = conn.prepareStatement(checkSql);
+            checkPstmt.setInt(1, idmateriel);
+            ResultSet checkRs = checkPstmt.executeQuery();
+
+            if (checkRs.next()) {
+                int quantitestock = checkRs.getInt("quantitestock");
+
+                if (quantitestock < quantite) {
+                    // Retourner un message d'erreur
+                    return "La quantité du matériel est insuffisante. Il manque " + (quantite - quantitestock) + " unités.";
+                }
+            }
+
+            // Soustraire la quantité de stock
+            String updateSql = "UPDATE stock SET quantitestock = quantitestock - ? WHERE idmateriel = ?";
+            PreparedStatement updatePstmt = conn.prepareStatement(updateSql);
+            updatePstmt.setInt(1, quantite);
+            updatePstmt.setInt(2, idmateriel);
+            updatePstmt.executeUpdate();
+
+            // Insérer dans la table 'historiquestock'
+            String insertSql = "INSERT INTO historiquestock (idmateriel, quantite, date,entree,sortie) VALUES (?, ?, CURRENT_DATE,false,true)";
+            PreparedStatement insertPstmt = conn.prepareStatement(insertSql);
+            insertPstmt.setInt(1, idmateriel);
+            insertPstmt.setInt(2, quantite);
+            insertPstmt.executeUpdate();
+        }
+    } catch (SQLException e) {
+        // Gérer les exceptions
+        e.printStackTrace();
+        e.getMessage();
+    }
+
+    return "Mise à jour du stock et de l'historique réussie.";
+}
+
+        
+        public void valider(Connection c, String idcomm , boolean isValid ) throws Exception {
             PreparedStatement pst = null;
-            String sql = "INSERT INTO validation (idcommande , isValid , idQuantite ) values (? , 1 , ?)";
+            String sql = "INSERT INTO validation (idcommande , isValid) values (? , ? )";
             try {
                  pst = c.prepareStatement(sql);
                
                 pst.setInt(1, parseInt(idcomm));
                 pst.setBoolean(2, isValid);
-                pst.setInt(3, parseInt(idQuantite));
                 
                 pst.executeUpdate();
             } catch (SQLException e) {
