@@ -16,6 +16,6 @@
     </head>
     <body>
         <h3>Insertion reussie.</h3>
-        <a href="index.html">Retourner a la page d'accueil.</a>
+        <a href="index.jsp">Retourner a la page d'accueil.</a>
     </body>
 </html>

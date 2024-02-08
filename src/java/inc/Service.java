@@ -871,41 +871,38 @@ public class Service {
     }
     
     
-    public List<Client> getStatistiques(Connection con,String produit, String genre) throws Exception {
-    List<Client> statistiques = new ArrayList<>();
-
-    // Utilisez une requête SQL pour récupérer les statistiques depuis la base de données
-    String sqlQuery = "SELECT c.idClient, c.nom, c.dateDeNaissance, c.genre , Count(*) " +
-                      "FROM client c " +
-                      "JOIN commande cmd ON c.idClient = cmd.idClient " +
-                      "WHERE cmd.produit = ? AND c.genre = ?";
-    PreparedStatement pst =null;
-    
-    try  {
-            con = getConnection();
-
-        pst = con.prepareStatement(sqlQuery);
-        pst.setString(1, produit);
-        pst.setString(2, genre);
-
-        try (ResultSet rs = pst.executeQuery()) {
-            while (rs.next()) {
-                Client client = new Client();
-                client.setIdClient(rs.getInt("idClient"));
-                client.setNomClient(rs.getString("nom"));
-//                client.setDateDeNaissance(rs.getDate("dateDeNaissance"));
-                client.setGenre(rs.getString("genre"));
-
-                statistiques.add(client);
-            }
-        }
-    } catch (SQLException e) {
-        e.printStackTrace(); // Gérez l'exception selon vos besoins
-    }
-
-    return statistiques;
-}
-    
+//    public List<Client> getStatistiques(Connection con,String produit, String genre) throws Exception {
+//    List<Client> statistiques = new ArrayList<>();
+//
+//    // Utilisez une requête SQL pour récupérer les statistiques depuis la base de données
+//    String sqlQuery = "SELECT categorie, style, taille, genre, COUNT(*) FROM v_getcommande GROUP BY categorie, style, taille, genre";
+//    PreparedStatement pst =null;
+//    
+//    try  {
+//            con = getConnection();
+//
+//        pst = con.prepareStatement(sqlQuery);
+//        pst.setString(1, produit);
+//        pst.setString(2, genre);
+//
+//        try (ResultSet rs = pst.executeQuery()) {
+//            while (rs.next()) {
+//                Client client = new Client();
+//                client.setIdClient(rs.getInt("idClient"));
+//                client.setNomClient(rs.getString("nom"));
+////                client.setDateDeNaissance(rs.getDate("dateDeNaissance"));
+//                client.setGenre(rs.getString("genre"));
+//
+//                statistiques.add(client);
+//            }
+//        }
+//    } catch (SQLException e) {
+//        e.printStackTrace(); // Gérez l'exception selon vos besoins
+//    }
+//
+//    return statistiques;
+//}
+//    
 //    public void insertCoeff(Connection c,String coeff,String idmetier) throws Exception{
 //        PreparedStatement pst = null;
 //        c=getConnection();
@@ -931,10 +928,8 @@ public class Service {
                 while (resultSet.next()) {
                     V_benefice b = new V_benefice();
                     
-//                    request.setAttribute(produit.setIdProduit(resultSet.getInt("id")),"rod")
                     b.setIdcategorie(resultSet.getInt("idcategorie"));
                     b.setCategorie(resultSet.getString("categorie"));
-//                    pers.setDateDeNaissance(resultSet.getDate("datedenaissance"));
                     b.setStyle(resultSet.getString("style"));
                     b.setTaille(resultSet.getString("taille"));
                     b.setMainsDoeuvres(resultSet.getInt("mainsdoeuvre"));
@@ -942,7 +937,6 @@ public class Service {
                     b.setPrixDeVente(resultSet.getInt("prixvente"));
                     b.setPrixDeRevient(resultSet.getInt("prixrevient"));
                     b.setBenefice(resultSet.getInt("benefice"));
-// Ajoutez d'autres propriétés en fonction de votre modèle de données
                     benef.add(b);
                 }
                 

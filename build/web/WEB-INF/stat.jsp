@@ -5,9 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="model.*" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.google.gson.Gson" %>
+<%@ page import="model.* , inc.Service" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,24 +19,40 @@
         <link href="assets/css/main.css" rel="stylesheet">      
         <script src="assets/js/chart.js"></script>
     </head>
-    <%
-        List<Client> client = (List<Client>) request.getAttribute("cl");
-        List<V_getCommande> cm = (List<V_getCommande>) request.getAttribute("cm");
-    %>    
+
+<%
+      Service s = new Service();
+      Connection conn = s.getConnection();
+    
+try {
+    String sql = "SELECT categorie, style, taille, genre, COUNT(*), COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY categorie, style, taille) FROM v_getcommande GROUP BY categorie, style, taille, genre";
+    PreparedStatement pstmt = conn.prepareStatement(sql);
+    ResultSet rs = pstmt.executeQuery();
+
+    // Afficher les résultats sous forme de tableau
+    out.println("<h3>Afficher les statistiques :</h3>");
+    out.println("<table>");
+    out.println("<tr><th>Categorie</th><th>Style</th><th>Taille</th><th>Genre</th><th>Nombre de commandes</th></tr>");
+
+    while (rs.next()) {
+        out.println("<tr>");
+        out.println("<td>" + rs.getString(1) + "</td>");
+        out.println("<td>" + rs.getString(2) + "</td>");
+        out.println("<td>" + rs.getString(3) + "</td>");
+        out.println("<td>" + rs.getString(4) + "</td>");
+        out.println("<td>" + rs.getInt(5) + "</td>");
+        out.println("<td>" + rs.getDouble(6) + "%</td>");
+        out.println("</tr>");
+    }
+
+    out.println("</table>");
+} catch (SQLException e) {
+    // Gérer les exceptions
+    e.printStackTrace();
+}
+%>
+
     <body>
-        <h3>Afficher les statistiques :</h3>
 
-    <h3>Statistiques sous forme de graphique :</h3>
-    <canvas id="myChart" width="300" height="100"></canvas>
-
-    <script>
-        // Données du graphique
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'pie',
-            data: <%= jsonString %>
-        });
-
-    </script>
     </body>
 </html>

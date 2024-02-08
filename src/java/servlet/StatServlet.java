@@ -31,12 +31,6 @@ public class StatServlet extends HttpServlet {
         try{
                  Service dataService = new Service();
         request.setAttribute("connection",dataService.getConnection());
-                 List<Client> list = dataService.getAllClients();
-                 List<V_getCommande> cm = dataService.getAllCommande();
-                 request.setAttribute("cl", list);
-                 request.setAttribute("commande",cm);
-        
-        // Redirigez vers la page JSP d'affichage
         request.getRequestDispatcher("/WEB-INF/stat.jsp").forward(request, response);
         }catch(Exception e){
             throw new ServletException(e);
