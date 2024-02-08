@@ -33,6 +33,10 @@
             background-color: #007bff;
             color: #ddd;
         }
+        .cnv{
+            width:300px;
+            height: 100px;
+        }
     </style>
     
     <% 
@@ -122,7 +126,7 @@
 								
 								</section>
                                                         <h4 style='text-decoration: underline;'>Statistique de vente de meuble par genre</h4>
-                                                                <canvas id="myChart" width="200" height="100"></canvas>
+                                                        <div class="cnv"><canvas id="myChart" width="200" height="100"></canvas></div>
 						</div>
 					</div>
 

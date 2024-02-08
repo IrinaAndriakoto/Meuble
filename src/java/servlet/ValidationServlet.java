@@ -16,9 +16,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import model.Categorie;
-import model.Materiel;
-import model.Style;
 import model.*;
 
 /**
@@ -63,14 +60,15 @@ public class ValidationServlet extends HttpServlet{
         
         Connection connection =null;               
 
-        String nb = request.getParameter("nb");
-        
-        String idcommande = request.getParameter("idcommande");
+
         Boolean v = true;
             try{
                 Service serv = new Service();
                 connection = serv.getConnection();
                 request.setAttribute("connection",connection);
+                        String nb = request.getParameter("nb");
+        
+        String idcommande = request.getParameter("idcommande");
                 int nbC = Integer.parseInt(nb);
                 String result = serv.updateStockAndHistorique(connection,nbC);
 

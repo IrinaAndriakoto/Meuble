@@ -46,7 +46,7 @@
                 <td>
                     <!-- Champ hidden pour stocker la valeur nb -->
                     <input type="hidden" name="nb" value="<%= cmd.getNbCommande() %>">
-                    <input type="hidden" name="idcommande" value="<%= cmd.getIdCommande() %>"
+                    <input type="hidden" name="idcommande" value="<%= cmd.getIdCommande() %>">
                     <!-- Bouton de soumission de formulaire -->
                     <input type="submit" value="Valider la commande">
                 </td>
